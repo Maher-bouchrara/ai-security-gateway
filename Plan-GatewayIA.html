@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan condensé — Gateway IA Sécurité</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#eef1f8;
+  --white:#ffffff;
+  --navy:#1a2c5b;
+  --navy2:#243570;
+  --pink:#e83e6c;
+  --pink2:#ff6b8a;
+  --blue:#2979ff;
+  --blue2:#1a56db;
+  --teal:#00bcd4;
+  --green:#43a047;
+  --amber:#f5a623;
+  --text:#1a2c5b;
+  --muted:#6b7a9e;
+  --border:#dce3f0;
+  --card:#ffffff;
+  --font:'Nunito',sans-serif;
+  --body:'Inter',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.65}
+
+/* NAV */
+nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 2rem}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:62px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.logo-badge{background:var(--pink);color:#fff;font-family:var(--font);font-weight:900;font-size:13px;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.nav-logo span{font-family:var(--font);font-weight:800;font-size:17px;color:var(--navy)}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{font-family:var(--font);font-weight:700;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:0 16px;transition:color .15s}
+.nav-links a:hover{color:var(--navy)}
+.nav-links a.active{color:var(--pink)}
+.nav-cta{background:var(--pink);color:#fff;font-family:var(--font);font-weight:700;font-size:13px;padding:8px 20px;border-radius:30px;text-decoration:none;border:none;cursor:pointer}
+
+/* HERO */
+.hero{background:var(--white);padding:0 2rem;overflow:hidden;border-bottom:1px solid var(--border)}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;min-height:420px}
+.hero-text{padding:3rem 0}
+.hero-eyebrow{font-family:var(--font);font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.hero-eyebrow::before{content:'';width:28px;height:2px;background:var(--pink)}
+.hero h1{font-family:var(--font);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;line-height:1.15;color:var(--navy);margin-bottom:1.2rem}
+.hero h1 em{color:var(--pink);font-style:normal}
+.hero-sub{font-size:14px;color:var(--muted);max-width:440px;margin-bottom:1.8rem;line-height:1.7}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-pink{background:var(--pink);color:#fff;font-family:var(--font);font-weight:700;font-size:13px;padding:12px 28px;border-radius:30px;text-decoration:none;border:none;cursor:pointer;transition:background .15s}
+.btn-pink:hover{background:#c9305a}
+.btn-navy{background:var(--navy);color:#fff;font-family:var(--font);font-weight:700;font-size:13px;padding:12px 28px;border-radius:30px;text-decoration:none;border:none;cursor:pointer;transition:background .15s}
+.btn-navy:hover{background:#0f1d40}
+.hero-visual{display:flex;align-items:center;justify-content:center;padding:2rem 0}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat-card{background:var(--bg);border-radius:14px;padding:1.2rem 1.4rem;border:1px solid var(--border)}
+.stat-card .num{font-family:var(--font);font-size:2rem;font-weight:900;color:var(--navy);line-height:1}
+.stat-card .num span{color:var(--pink)}
+.stat-card .lbl{font-size:12px;color:var(--muted);margin-top:4px}
+.stat-big{grid-column:1/-1;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;border:none}
+.stat-big .num{color:#fff}
+.stat-big .num span{color:var(--pink2)}
+.stat-big .lbl{color:rgba(255,255,255,0.65)}
+
+/* PHASES BAR */
+.phases-bar{background:var(--white);border-bottom:2px solid var(--border);padding:0 2rem;overflow-x:auto}
+.phases-inner{max-width:1100px;margin:0 auto;display:flex;gap:0}
+.phase-tab{font-family:var(--font);font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;padding:16px 20px;border-bottom:3px solid transparent;color:var(--muted);cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s}
+.phase-tab:hover{color:var(--navy)}
+.phase-tab.p1.active,.phase-tab.p1:hover{border-color:var(--teal);color:var(--teal)}
+.phase-tab.p2.active,.phase-tab.p2:hover{border-color:var(--blue);color:var(--blue)}
+.phase-tab.p3.active,.phase-tab.p3:hover{border-color:var(--pink);color:var(--pink)}
+.phase-tab.p4.active,.phase-tab.p4:hover{border-color:var(--amber);color:var(--amber)}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:2.5rem 2rem 4rem}
+
+/* SECTION */
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:1.5rem}
+.section-badge{font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:30px}
+.s-teal{background:#e0f7fa;color:#00838f}
+.s-blue{background:#e3f0ff;color:var(--blue2)}
+.s-pink{background:#fce4ec;color:#c62828}
+.s-amber{background:#fff3e0;color:#e65100}
+.section-header h2{font-family:var(--font);font-size:1.3rem;font-weight:900;color:var(--navy)}
+.section-divider{height:1px;background:var(--border);margin-bottom:2.5rem}
+
+/* SESSION CARD */
+.session-grid{display:flex;flex-direction:column;gap:16px;margin-bottom:3.5rem}
+.session-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:box-shadow .2s}
+.session-card:hover{box-shadow:0 6px 32px rgba(26,44,91,0.09)}
+.session-head{display:grid;grid-template-columns:80px 1fr auto;align-items:center;gap:0;cursor:pointer;padding:0}
+.session-num{background:var(--navy);color:#fff;font-family:var(--font);font-weight:900;font-size:1.1rem;text-align:center;padding:1.2rem 0;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:80px}
+.session-num small{font-size:10px;font-weight:600;opacity:.65;letter-spacing:.04em;text-transform:uppercase}
+.session-num.c-teal{background:var(--teal)}
+.session-num.c-blue{background:var(--blue)}
+.session-num.c-pink{background:var(--pink)}
+.session-num.c-amber{background:var(--amber)}
+.session-title-block{padding:1rem 1.3rem}
+.session-date{font-size:11px;font-weight:600;color:var(--muted);font-family:var(--font);letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+.session-title{font-family:var(--font);font-size:15px;font-weight:800;color:var(--navy)}
+.session-subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+.session-toggle{padding:1rem 1.5rem;display:flex;align-items:center;justify-content:center}
+.toggle-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,transform .2s;font-size:14px;color:var(--muted)}
+.session-card.open .toggle-btn{background:var(--navy);color:#fff;border-color:var(--navy);transform:rotate(180deg)}
+
+.session-body{display:none;padding:0 1.5rem 1.5rem;border-top:1px solid var(--border)}
+.session-body.open{display:block}
+
+/* TIMING STRIP */
+.timing-strip{display:flex;gap:8px;flex-wrap:wrap;padding:1rem 0 1.2rem}
+.time-block{display:flex;flex-direction:column;align-items:center;padding:8px 14px;border-radius:10px;border:1px solid var(--border);min-width:100px}
+.time-block .t{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--navy)}
+.time-block .d{font-size:10px;color:var(--muted);margin-top:2px;text-align:center}
+.time-block.learn{background:#e0f7fa;border-color:#b2ebf2}
+.time-block.learn .t{color:#00838f}
+.time-block.build{background:#e3f0ff;border-color:#bbdefb}
+.time-block.build .t{color:var(--blue2)}
+.time-block.test{background:#fce4ec;border-color:#f8bbd0}
+.time-block.test .t{color:#ad1457}
+.time-block.doc{background:#fff3e0;border-color:#ffe0b2}
+.time-block.doc .t{color:#bf360c}
+
+/* BODY CONTENT */
+.step-list{list-style:none;margin-bottom:1.2rem}
+.step-list li{font-size:13.5px;color:#3a4a6b;padding:6px 0;display:flex;gap:10px;align-items:flex-start;border-bottom:1px dashed var(--border)}
+.step-list li:last-child{border-bottom:none}
+.step-list li::before{content:'→';color:var(--pink);font-weight:700;flex-shrink:0;margin-top:1px}
+
+.resource-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:0.8rem}
+.res-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;font-family:var(--font);padding:5px 12px;border-radius:20px;text-decoration:none;border:1.5px solid;transition:background .15s}
+.res-link.r-blue{color:var(--blue2);border-color:#b3d1ff;background:#f0f7ff}
+.res-link.r-blue:hover{background:#e3f0ff}
+.res-link.r-green{color:#2e7d32;border-color:#c8e6c9;background:#f1f8e9}
+.res-link.r-green:hover{background:#dcedc8}
+.res-link.r-pink{color:#c62828;border-color:#ffcdd2;background:#fff5f5}
+.res-link.r-pink:hover{background:#ffebee}
+
+.deliverable-box{background:var(--bg);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:10px 14px;margin-top:1rem;font-size:13px}
+.deliverable-box strong{color:var(--navy);font-family:var(--font);font-weight:800}
+.deliverable-box span{color:var(--muted)}
+
+.tip-box{background:#fff9e6;border:1px solid #ffe082;border-radius:10px;padding:10px 14px;margin-top:1rem;font-size:12.5px;color:#795548}
+.tip-box strong{color:#e65100}
+
+/* SCHEDULE SUMMARY */
+.schedule-summary{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:3rem}
+.sched-head{background:var(--navy);color:#fff;padding:1.2rem 1.5rem;font-family:var(--font);font-weight:800;font-size:14px}
+.sched-grid{display:grid;grid-template-columns:90px 1fr auto;align-items:stretch}
+.sched-time{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--blue2);padding:10px 12px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center}
+.sched-act{font-size:13px;color:var(--text);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.sched-tag{font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+.tg-l{background:#e0f7fa;color:#00838f}
+.tg-b{background:#e3f0ff;color:var(--blue2)}
+.tg-r{background:#fce4ec;color:#ad1457}
+.sched-dur{font-size:11px;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;white-space:nowrap}
+
+/* TECH STACK */
+.stack-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:3rem}
+.stack-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.2rem}
+.stack-card h4{font-family:var(--font);font-size:13px;font-weight:800;color:var(--navy);margin-bottom:0.7rem;display:flex;align-items:center;gap:7px}
+.stack-icon{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.si-teal{background:#e0f7fa;color:#00838f}
+.si-blue{background:#e3f0ff;color:var(--blue2)}
+.si-pink{background:#fce4ec;color:#c62828}
+.si-amber{background:#fff3e0;color:#e65100}
+.stack-card ul{list-style:none}
+.stack-card li{font-size:12px;color:var(--muted);padding:3px 0;border-bottom:1px dashed var(--border)}
+.stack-card li:last-child{border-bottom:none}
+.stack-card li b{color:var(--navy)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.55);text-align:center;padding:2rem;font-size:12px}
+footer strong{color:#fff}
+
+@media(max-width:700px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .session-head{grid-template-columns:60px 1fr auto}
+  .timing-strip{flex-direction:column}
+}
+
+.session-intro{font-size:13.5px;color:#3a4a6b;padding:1rem 0 0.2rem;line-height:1.6}
+.kw-label{font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:1rem 0 0.5rem}
+.kw-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0.8rem}
+.kw{font-family:'Nunito',sans-serif;font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:8px;background:#eef1f8;color:var(--navy);border:1px solid var(--border)}
+.step-label{font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:1rem 0 0.4rem}
+.step-list li{display:block;padding:8px 0}
+.step-list li b.stepnum{color:var(--pink);font-family:var(--font);font-weight:900;margin-right:6px}
+.step-list li::before{content:none}
+.recap-box{background:#f4f1fb;border:1px solid #ddd3f5;border-left:3px solid #7c4dff;border-radius:0 10px 10px 0;padding:10px 14px;margin-top:0.6rem;font-size:12.5px;color:#3a2e5c}
+.recap-box strong{color:#5e2dd6;font-family:var(--font);font-weight:800}
+.readme-box{background:#eafaf1;border:1px solid #c3ecd3;border-left:3px solid #2e9e5b;border-radius:0 10px 10px 0;padding:10px 14px;margin-top:0.8rem;font-size:12.5px;color:#1d5c39}
+.readme-box strong{color:#1d6b3f;font-family:var(--font);font-weight:800}
+.readme-box code{background:#fff;border:1px solid #c3ecd3}
+.intro-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.8rem 2rem;margin-bottom:2.5rem}
+.intro-wrap h2{font-family:var(--font);font-weight:900;color:var(--navy);font-size:1.15rem;margin-bottom:0.8rem}
+.intro-wrap p{font-size:13.5px;color:#3a4a6b;line-height:1.7;margin-bottom:0.8rem}
+.intro-wrap ul{margin:0.5rem 0 1rem 1.2rem;font-size:13.5px;color:#3a4a6b;line-height:1.8}
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:0.8rem}
+.gloss-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 13px}
+.gloss-item b{display:block;font-family:var(--font);font-weight:800;color:var(--navy);font-size:12.5px;margin-bottom:3px}
+.gloss-item span{font-size:12px;color:var(--muted);line-height:1.5}
+.gloss-cat{font-family:var(--font);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--pink);margin:1.4rem 0 0.6rem}
+.gloss-cat:first-of-type{margin-top:0.6rem}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo"><div class="logo-badge">GIA</div><span>Gateway<b style="color:var(--pink)">IA</b></span></div>
+    <ul class="nav-links">
+      <li><a href="#phase1" class="active">Phase 1</a></li>
+      <li><a href="#phase2">Phase 2</a></li>
+      <li><a href="#phase3">Phase 3</a></li>
+      <li><a href="#phase4">Phase 4</a></li>
+      <li><a href="#stack">Stack</a></li>
+    </ul>
+    <a href="#phase1" class="nav-cta">Commencer →</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Réf. 01-2026 · Version condensée &amp; guidée</div>
+      <h1>Gateway de Sécurité <em>IA</em> &amp; Anonymisation Réversible</h1>
+      <p class="hero-sub">17 sessions de ~4h. Chaque séance explique le pourquoi, liste les mots-clés à connaître, et détaille les étapes pour avancer sans bloquer.</p>
+      <div class="hero-btns"><a href="#phase1" class="btn-pink">Voir le plan complet</a><a href="#stack" class="btn-navy">Stack technique</a></div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-stats">
+        <div class="stat-card"><div class="num">17</div><div class="lbl">sessions</div></div>
+        <div class="stat-card"><div class="num">~4<span>h</span></div><div class="lbl">par session</div></div>
+        <div class="stat-big"><div class="num">~68<span>h</span></div><div class="lbl">de travail total</div></div>
+        <div class="stat-card"><div class="num">4</div><div class="lbl">phases</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="phases-bar">
+  <div class="phases-inner">
+    <a href="#phase1" class="phase-tab p1 active">🛠 Phase 1 — Fondations (S1–S3)</a>
+    <a href="#phase2" class="phase-tab p2">🔐 Phase 2 — Sécurité IA (S4–S9)</a>
+    <a href="#phase3" class="phase-tab p3">🖥 Phase 3 — Frontend (S10–S14)</a>
+    <a href="#phase4" class="phase-tab p4">🎤 Phase 4 — Finition (S15–S17)</a>
+  </div>
+</div>
+
+<div class="main" style="padding-top:2.5rem">
+<div class="intro-wrap">
+  <h2>📋 Le sujet, en clair</h2>
+  <p><b>Sujet officiel (Réf. 01-2026) :</b> "Développement de Gateway de Sécurité IA &amp; Anonymisation Réversible." Techs imposées : LLM, Python, React.js, TypeScript, API REST.</p>
+  <p>En une phrase : les employés veulent utiliser des LLM puissants (ChatGPT, Claude…) pour leur travail, mais ils tapent parfois des données sensibles (noms, IBAN, emails de clients…) dans leurs messages. Le RGPD interdit d'envoyer ces données à un tiers (le fournisseur du LLM) sans contrôle. Ton projet construit une <b>passerelle</b> (gateway) qui s'intercale entre l'utilisateur et le LLM : elle retire automatiquement les données sensibles avant l'envoi, les remplace par des jetons (tokens), puis les remet à la bonne place dans la réponse — sans que le LLM n'ait jamais vu la vraie donnée.</p>
+  <p>Les 4 fonctionnalités demandées dans le sujet, et où elles correspondent dans ton plan :</p>
+  <ul>
+    <li><b>Anonymisation dynamique par Vaulting</b> — détecter les PII et les remplacer par des tokens avant l'envoi au LLM → Sessions 4-5</li>
+    <li><b>Sécurisation des flux (Input/Output)</b> — bloquer les tentatives de manipulation du LLM en entrée, vérifier la toxicité en sortie → Session 6</li>
+    <li><b>Matching inverse et Désanonymisation</b> — remettre les vraies données dans la réponse finale grâce au Vault → Session 5 (et assemblé en Session 7)</li>
+    <li><b>Dashboard d'Audit</b> — interface qui montre les tentatives d'attaque et la latence ajoutée par la sécurité → Sessions 8, 12-14</li>
+  </ul>
+
+  <h2 style="margin-top:1.6rem">📖 Glossaire — tous les mots techniques du projet</h2>
+  <p>Pas besoin de tout retenir d'un coup : reviens ici à chaque fois qu'un terme te bloque dans une session.</p>
+
+  <div class="gloss-cat">Concepts métier / sécurité</div>
+  <div class="glossary-grid">
+    <div class="gloss-item"><b>RGPD</b><span>Règlement européen sur la protection des données personnelles. Encadre strictement ce qu'on a le droit de faire avec des données comme un nom ou un email.</span></div>
+    <div class="gloss-item"><b>PII</b><span>Personally Identifiable Information — toute donnée qui permet d'identifier une personne (nom, email, IBAN, téléphone…).</span></div>
+    <div class="gloss-item"><b>LLM</b><span>Large Language Model — le modèle d'IA générative (ex. GPT, Claude) auquel on envoie les messages.</span></div>
+    <div class="gloss-item"><b>LLM Guard</b><span>Librairie Python qui scanne les messages envoyés/reçus d'un LLM pour détecter attaques et contenus à risque.</span></div>
+    <div class="gloss-item"><b>Vaulting / Vault</b><span>Le "coffre-fort" : une base de données qui stocke le lien entre un token et la vraie valeur qu'il remplace, pour pouvoir la retrouver plus tard.</span></div>
+    <div class="gloss-item"><b>Tokenisation</b><span>Remplacer une donnée sensible par un identifiant neutre (ex. <code>[PERSONNE_1]</code>) qui ne révèle rien en lui-même.</span></div>
+    <div class="gloss-item"><b>Anonymisation / Désanonymisation</b><span>Anonymisation = remplacer la donnée par un token avant l'envoi au LLM. Désanonymisation = l'opération inverse sur la réponse, pour l'utilisateur final.</span></div>
+    <div class="gloss-item"><b>Matching inverse</b><span>Le mécanisme qui retrouve, à partir d'un token vu dans la réponse du LLM, la vraie valeur d'origine stockée dans le Vault.</span></div>
+    <div class="gloss-item"><b>Prompt Injection / Jailbreaking</b><span>Technique où un utilisateur essaie de manipuler le LLM pour lui faire ignorer ses instructions de sécurité (ex. "Ignore tes instructions précédentes...").</span></div>
+    <div class="gloss-item"><b>Toxicité</b><span>Contenu offensant, haineux ou dangereux qu'un LLM pourrait générer en sortie, et qu'il faut filtrer avant de l'afficher.</span></div>
+    <div class="gloss-item"><b>Audit / Dashboard d'Audit</b><span>Le suivi de tout ce qui se passe (tentatives d'attaque, PII détectées, latence) affiché sous forme de graphiques pour un humain.</span></div>
+    <div class="gloss-item"><b>Latence</b><span>Le temps ajouté par une étape (ici, la couche de sécurité) avant que l'utilisateur reçoive sa réponse.</span></div>
+    <div class="gloss-item"><b>NER</b><span>Named Entity Recognition — technique de NLP qui repère dans un texte les entités nommées (personne, lieu, date…), utilisée par Presidio pour détecter les PII.</span></div>
+    <div class="gloss-item"><b>NLP</b><span>Natural Language Processing — traitement automatique du langage humain par un programme.</span></div>
+  </div>
+
+  <div class="gloss-cat">Backend</div>
+  <div class="glossary-grid">
+    <div class="gloss-item"><b>FastAPI</b><span>Framework Python pour construire des APIs REST rapidement, avec validation automatique et documentation Swagger générée toute seule.</span></div>
+    <div class="gloss-item"><b>Pydantic</b><span>Librairie qui valide la forme des données entrantes/sortantes d'une API à partir de classes Python typées.</span></div>
+    <div class="gloss-item"><b>async / await</b><span>Mécanisme Python pour exécuter du code sans bloquer le programme pendant qu'on attend une réponse (ex. un appel réseau au LLM).</span></div>
+    <div class="gloss-item"><b>ORM</b><span>Object-Relational Mapping — permet de manipuler une base de données avec des objets/classes Python plutôt qu'en écrivant du SQL à la main.</span></div>
+    <div class="gloss-item"><b>SQLAlchemy</b><span>L'ORM Python le plus utilisé, ici en version async pour fonctionner avec FastAPI.</span></div>
+    <div class="gloss-item"><b>CRUD</b><span>Create / Read / Update / Delete — les 4 opérations de base sur des données en base.</span></div>
+    <div class="gloss-item"><b>JWT</b><span>JSON Web Token — un jeton signé qui prouve qu'un utilisateur est authentifié, envoyé dans chaque requête protégée.</span></div>
+    <div class="gloss-item"><b>SSE</b><span>Server-Sent Events — technologie qui permet au serveur d'envoyer des petits bouts de réponse au fur et à mesure (utilisé pour le streaming du chat).</span></div>
+    <div class="gloss-item"><b>CORS</b><span>Cross-Origin Resource Sharing — règle de sécurité du navigateur qu'il faut explicitement autoriser pour que le frontend (autre origine) puisse appeler le backend.</span></div>
+    <div class="gloss-item"><b>LiteLLM</b><span>Librairie qui uniformise l'appel à différents LLM (OpenAI, Anthropic, Mistral…) avec la même syntaxe.</span></div>
+    <div class="gloss-item"><b>Microsoft Presidio</b><span>Outil open-source de Microsoft pour détecter et anonymiser des PII dans du texte.</span></div>
+    <div class="gloss-item"><b>SpaCy</b><span>Librairie Python de NLP, utilisée en interne par Presidio pour analyser le texte en français.</span></div>
+  </div>
+
+  <div class="gloss-cat">Frontend</div>
+  <div class="glossary-grid">
+    <div class="gloss-item"><b>React</b><span>Librairie JavaScript pour construire des interfaces utilisateur à base de composants réutilisables.</span></div>
+    <div class="gloss-item"><b>TypeScript</b><span>Sur-couche de JavaScript qui ajoute un système de types — détecte des erreurs avant même d'exécuter le code.</span></div>
+    <div class="gloss-item"><b>Vite</b><span>Outil de build/démarrage ultra-rapide pour les projets frontend modernes (remplace l'ancien Create React App).</span></div>
+    <div class="gloss-item"><b>Tailwind CSS</b><span>Framework CSS "utility-first" : on stylise directement dans le HTML/JSX avec des classes courtes plutôt que d'écrire du CSS séparé.</span></div>
+    <div class="gloss-item"><b>Zustand</b><span>Petite librairie de gestion d'état global pour React, plus simple que Redux.</span></div>
+    <div class="gloss-item"><b>Axios</b><span>Librairie JavaScript pour faire des requêtes HTTP vers une API depuis le frontend.</span></div>
+    <div class="gloss-item"><b>Recharts</b><span>Librairie de graphiques (charts) pour React, utilisée pour le Dashboard d'Audit.</span></div>
+    <div class="gloss-item"><b>ReadableStream</b><span>API web standard pour lire un flux de données (ici, les événements SSE) morceau par morceau.</span></div>
+  </div>
+
+  <div class="gloss-cat">Tests &amp; Outils</div>
+  <div class="glossary-grid">
+    <div class="gloss-item"><b>pytest</b><span>Framework de tests automatisés pour Python.</span></div>
+    <div class="gloss-item"><b>Mock</b><span>Remplacer temporairement une vraie dépendance (ex. l'appel au LLM) par une fausse version contrôlée, pour tester sans dépendre d'un service externe.</span></div>
+    <div class="gloss-item"><b>Playwright</b><span>Outil de tests end-to-end (E2E) qui pilote un vrai navigateur pour simuler un utilisateur.</span></div>
+    <div class="gloss-item"><b>Locust</b><span>Outil de test de charge : simule plusieurs utilisateurs en parallèle pour mesurer la performance sous pression.</span></div>
+    <div class="gloss-item"><b>p50 / p95 / p99</b><span>Percentiles de latence : p95 par ex. veut dire que 95% des requêtes sont plus rapides que cette valeur — plus parlant qu'une simple moyenne.</span></div>
+    <div class="gloss-item"><b>Docker / docker-compose</b><span>Docker empaquette une appli avec tout son environnement pour qu'elle tourne pareil partout. docker-compose orchestre plusieurs containers ensemble (backend, frontend…) en une commande.</span></div>
+    <div class="gloss-item"><b>CI (Intégration Continue)</b><span>Processus automatique (ici via GitHub Actions) qui lance les tests à chaque push, pour détecter vite les régressions.</span></div>
+    <div class="gloss-item"><b>ADR</b><span>Architecture Decision Record — document court qui explique pourquoi tu as choisi une techno plutôt qu'une autre.</span></div>
+    <div class="gloss-item"><b>Swagger / OpenAPI</b><span>Documentation interactive d'une API, générée automatiquement par FastAPI, accessible sur <code>/docs</code>.</span></div>
+  </div>
+</div>
+</div>
+
+<div class="main" style="padding-top:0">
+
+
+<div id="phase1">
+<div class="section-header"><span class="section-badge s-teal">🛠</span><h2>Fondations &amp; Architecture — Sessions 1 à 3</h2></div>
+<p style="color:var(--muted);font-size:13px;margin:-1rem 0 1.2rem">Repo, FastAPI, DB, Docker, tests/CI</p>
+<div class="section-divider"></div>
+<div class="session-grid">
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-teal">01<small>Sem.1</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.1</div>
+      <div class="session-title">Setup + Archi + Squelette API</div>
+      <div class="session-subtitle">Demarrer le repo, dessiner l'archi, lancer un premier backend qui parle a un LLM</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Coup d'envoi du projet — rien avant, c'est le point de départ.</div>
+    <p class="session-intro">L'objectif est de poser la structure du projet une bonne fois pour toutes : repo propre, schema d'architecture clair, et un backend FastAPI qui sait deja envoyer un message a un LLM. Tout le reste du projet viendra se greffer dessus.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">FastAPI</span><span class="kw">Pydantic v2</span><span class="kw">Uvicorn</span><span class="kw">LiteLLM</span><span class="kw">CORS</span><span class="kw">Excalidraw</span><span class="kw">.env / python-dotenv</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">Archi + repo</div></div><div class="time-block build"><div class="t">20:45</div><div class="d">Pydantic + routes</div></div><div class="time-block build"><div class="t">22:30</div><div class="d">LLM client</div></div><div class="time-block test"><div class="t">23:30</div><div class="d">Tests + commit</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Cree le repo <code>ai-security-gateway</code> avec 3 dossiers : <code>/backend</code>, <code>/frontend</code>, <code>/docs</code>. C'est la structure que tu garderas tout le projet.</li><li><b class='stepnum'>2.</b>Sur Excalidraw, dessine le flux complet en une ligne : <code>User -&gt; Gateway -&gt; [Anonymizer -&gt; Vault] -&gt; LLM -&gt; [Deanonymizer] -&gt; User</code>. Ce schema te servira aussi pour la soutenance.</li><li><b class='stepnum'>3.</b><code>pip install fastapi uvicorn[standard] pydantic httpx python-dotenv openai litellm</code>. <b>LiteLLM</b> est une couche d'abstraction : elle te permet d'appeler OpenAI, Anthropic ou Mistral avec la meme syntaxe, donc tu ne te lies pas a un seul fournisseur.</li><li><b class='stepnum'>4.</b>Definis 2 modeles <b>Pydantic</b> (validation automatique des donnees entrantes/sortantes) : <code>ChatRequest(message, user_id, session_id)</code> et <code>ChatResponse(reply, tokens_used, pii_detected)</code>.</li><li><b class='stepnum'>5.</b>Cree les routes <code>GET /health</code> (verifie que l'API tourne) et <code>POST /chat</code> (appelle <code>llm_client.send()</code> et renvoie la reponse). Active le <b>CORS</b> des maintenant pour que le futur frontend React puisse appeler l'API sans erreur de navigateur.</li><li><b class='stepnum'>6.</b>Mets ta cle API dans un fichier <code>.env</code>, lis-la avec <code>python-dotenv</code>, et verifie qu'elle est bien listee dans <code>.gitignore</code> avant ton premier commit.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc FastAPI Tutorial</a><a class="res-link r-green" href="#">Doc LiteLLM</a><a class="res-link r-pink" href="#">Outil Excalidraw</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Backend qui repond sur /health et /chat avec un vrai appel LLM, schema d'archi fait</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Crée <code>README.md</code> avec : titre du projet, description en 2 lignes, schéma d'architecture (image Excalidraw), section 'Installation' encore vide.</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-teal">02<small>Sem.1</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.1</div>
+      <div class="session-title">Persistance — Vault & Audit (SQLite) + Docker</div>
+      <div class="session-subtitle">Donner une memoire au projet (DB) et le rendre lancable en une commande (Docker)</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S1 avec un backend FastAPI qui répond sur /health et /chat, plus un schéma d'architecture clair.</div>
+    <p class="session-intro">Deux briques essentielles pour la suite : une base de donnees pour stocker les futurs tokens d'anonymisation et les logs de securite, et une containerisation Docker pour que tout demarre avec une seule commande.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">SQLAlchemy (async)</span><span class="kw">aiosqlite</span><span class="kw">ORM</span><span class="kw">Dockerfile</span><span class="kw">docker-compose</span><span class="kw">.dockerignore</span><span class="kw">dbdiagram.io</span></div>
+    <div class="timing-strip"><div class="time-block learn"><div class="t">20:00</div><div class="d">Schema DB</div></div><div class="time-block build"><div class="t">20:30</div><div class="d">SQLAlchemy + CRUD</div></div><div class="time-block build"><div class="t">22:30</div><div class="d">Dockerfile + compose</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Avant de coder, dessine 2 tables sur dbdiagram.io : <code>vault_tokens(id, token, original_value, entity_type, session_id, created_at, expires_at)</code> et <code>audit_events(id, session_id, event_type, severity, pii_count, risk_score, latency_ms, created_at)</code>.</li><li><b class='stepnum'>2.</b><code>pip install sqlalchemy aiosqlite</code>. SQLAlchemy est l'<b>ORM</b> (Object-Relational Mapping) : il te permet de manipuler la DB avec des classes Python plutot qu'en SQL brut. <code>aiosqlite</code> donne la version async de SQLite, coherente avec FastAPI.</li><li><b class='stepnum'>3.</b>Cree <code>database.py</code> (connexion async + modeles SQLAlchemy) et <code>crud.py</code> avec 4 fonctions : <code>create_token()</code>, <code>get_token()</code>, <code>delete_expired_tokens()</code>, <code>log_event()</code>. Teste-les en Python pur avant de les brancher a l'API.</li><li><b class='stepnum'>4.</b>Ecris un <code>Dockerfile</code> base sur <code>python:3.11-slim</code> et un <code>docker-compose.yml</code> avec le service backend + un volume pour que la DB SQLite survive aux redemarrages du container.</li><li><b class='stepnum'>5.</b>Ajoute un <code>.dockerignore</code> (exclure <code>venv/</code>, <code>.env</code>, <code>__pycache__</code>) puis lance <code>docker-compose up --build</code> et verifie depuis Postman que les routes repondent bien depuis le container.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Outil dbdiagram.io</a><a class="res-link r-green" href="#">Doc SQLAlchemy Quickstart</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>DB SQLite avec 2 tables + CRUD testes, docker-compose up fonctionnel</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Ajoute la section <b>Base de données</b> (schéma des tables <code>vault_tokens</code> / <code>audit_events</code>) et <b>Lancer en local</b> avec <code>docker-compose up --build</code>.</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-teal">03<small>Sem.2</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.2</div>
+      <div class="session-title">Tests, CI & Revue Phase 1</div>
+      <div class="session-subtitle">Securiser ce que tu as construit avant d'attaquer la partie securite IA</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S2 avec une DB SQLite (Vault + Audit) et tout le backend dockerisé via docker-compose.</div>
+    <p class="session-intro">Avant d'ajouter de la complexite (Phase 2), on consolide : des tests automatises qui prouvent que le backend marche, une CI qui les lance a chaque push, et un nettoyage general.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">pytest</span><span class="kw">pytest-asyncio</span><span class="kw">TestClient</span><span class="kw">unittest.mock</span><span class="kw">GitHub Actions (CI)</span><span class="kw">git tag</span></div>
+    <div class="timing-strip"><div class="time-block test"><div class="t">20:00</div><div class="d">pytest + mocks</div></div><div class="time-block build"><div class="t">21:45</div><div class="d">GitHub Actions</div></div><div class="time-block doc"><div class="t">22:30</div><div class="d">Refactor + README</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b><code>pip install pytest pytest-asyncio httpx</code>. Cree <code>test_routes.py</code> : teste <code>GET /health</code> avec le <code>TestClient</code> de FastAPI, puis <code>POST /chat</code> en <b>mockant</b> le LLM (<code>unittest.mock.patch</code>) pour ne pas consommer de vrais tokens d'API a chaque test.</li><li><b class='stepnum'>2.</b>Cree <code>test_crud.py</code> qui teste <code>create_token()</code> et <code>get_token()</code> sur une base en memoire.</li><li><b class='stepnum'>3.</b>Configure une <b>CI</b> : cree <code>.github/workflows/ci.yml</code> pour que GitHub Actions lance automatiquement <code>pytest</code> a chaque push.</li><li><b class='stepnum'>4.</b>Relis tout ton code, ajoute des docstrings sur les fonctions importantes, verifie qu'aucune cle API n'est dans l'historique Git, et complete le README avec le schema d'architecture.</li><li><b class='stepnum'>5.</b>Fais un <code>git tag v0.1.0-foundation</code>.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc pytest how-to</a><a class="res-link r-green" href="#">Doc FastAPI Testing</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Suite de tests verte, CI en place, tag v0.1.0</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Ajoute la section <b>Tests</b> (commande <code>pytest -v</code>, badge CI GitHub Actions) et mentionne le tag <code>v0.1.0-foundation</code>.</div>
+    <div class="tip-box"><strong>Conseil :</strong> Checkpoint Phase 1 : tu as un backend FastAPI dockerise qui appelle un vrai LLM, avec une DB et des tests. C'est la fondation sur laquelle repose tout le reste.</div>
+  </div>
+</div></div></div>
+
+<div id="phase2">
+<div class="section-header"><span class="section-badge s-blue">🔐</span><h2>Sécurité IA — Sessions 4 à 9</h2></div>
+<p style="color:var(--muted);font-size:13px;margin:-1rem 0 1.2rem">PII, Presidio, Vault, LLM Guard, pipeline complet, audit, streaming</p>
+<div class="section-divider"></div>
+<div class="session-grid">
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-blue">04<small>Sem.2</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.2</div>
+      <div class="session-title">Spec PII (RGPD/OWASP) + Microsoft Presidio</div>
+      <div class="session-subtitle">Comprendre precisement ce qu'on protege, puis detecter les donnees sensibles en francais</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Phase 1 terminée (tag v0.1.0) : backend dockerisé, testé en CI, qui appelle déjà un vrai LLM.</div>
+    <p class="session-intro">Avant de coder de la securite, il faut savoir exactement ce qu'on securise. Cette session a 2 volets : la reflexion (quelles donnees sont sensibles, quelles menaces existent) puis le premier outil concret de detection (Presidio).</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">RGPD</span><span class="kw">CNIL</span><span class="kw">OWASP LLM Top 10 (LLM01/02/06)</span><span class="kw">Microsoft Presidio</span><span class="kw">SpaCy (NLP)</span><span class="kw">NER</span><span class="kw">AnalyzerEngine</span></div>
+    <div class="timing-strip"><div class="time-block learn"><div class="t">20:00</div><div class="d">CNIL + OWASP</div></div><div class="time-block doc"><div class="t">21:00</div><div class="d">pii_spec.md</div></div><div class="time-block build"><div class="t">22:00</div><div class="d">Presidio + SpaCy FR</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Lis la page CNIL sur IA et RGPD, puis l'OWASP LLM Top 10 — concentre-toi sur LLM01 (Prompt Injection), LLM02 (Insecure Output Handling) et LLM06 (Sensitive Information Disclosure), les 3 menaces directement liees a ton projet.</li><li><b class='stepnum'>2.</b>Redige <code>docs/pii_spec.md</code> : liste 15 entites PII (PERSON, EMAIL, PHONE, IBAN, NIF, ADDRESS, DATE_OF_BIRTH, MEDICAL_RECORD…) avec format attendu, exemple reel, criticite. Definis le format de tokenisation, ex. <code>[PERSONNE_1]</code>, <code>[EMAIL_1]</code>.</li><li><b class='stepnum'>3.</b><code>pip install presidio-analyzer presidio-anonymizer</code> puis <code>python -m spacy download fr_core_news_md</code>. <b>Presidio</b> (Microsoft) detecte les PII en s'appuyant en interne sur <b>SpaCy</b>, un moteur de <b>NLP</b>, pour faire de la <b>NER</b> (Named Entity Recognition).</li><li><b class='stepnum'>4.</b>Cree <code>anonymizer.py</code> avec une classe <code>PIIDetector</code> et une methode <code>analyze(text) -&gt; List[RecognizerResult]</code>, via l'<code>AnalyzerEngine</code> de Presidio configure en langue <code>fr</code>.</li><li><b class='stepnum'>5.</b>Teste sur 10 phrases francaises variees, note le score de confiance de chaque detection — utile pour ton rapport de securite plus tard.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc OWASP LLM Top 10</a><a class="res-link r-green" href="#">Doc Presidio Analyzer</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>pii_spec.md complet, PIIDetector fonctionnel en francais sur 10 phrases testees</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Ajoute la section <b>Sécurité — Détection PII</b> : lien vers <code>docs/pii_spec.md</code>, liste rapide des 15 entités détectées.</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-blue">05<small>Sem.3</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.3</div>
+      <div class="session-title">Vault — Tokenisation reversible</div>
+      <div class="session-subtitle">Remplacer les vraies donnees par des tokens, puis pouvoir les retrouver plus tard</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S4 avec PIIDetector qui détecte 15 types de données personnelles en français.</div>
+    <p class="session-intro">C'est le coeur technique de l'anonymisation reversible : la donnee sensible ne part jamais vers le LLM, mais ton systeme garde une trace pour la reinjecter dans la reponse finale.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">Tokenisation</span><span class="kw">Vault (coffre de mapping)</span><span class="kw">TTL / expiration</span><span class="kw">anonymize() / deanonymize()</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">anonymize() + mapping</div></div><div class="time-block build"><div class="t">22:00</div><div class="d">deanonymize() + persistance</div></div><div class="time-block test"><div class="t">23:30</div><div class="d">Test cycle complet</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Ajoute a <code>anonymizer.py</code> la methode <code>anonymize(text, session_id) -&gt; AnonymizeResult</code>, qui renvoie le texte tokenise + un <code>mapping</code> (dict token -&gt; valeur reelle). Ex : "Bonjour Marie Martin" devient "Bonjour [PERSONNE_1]".</li><li><b class='stepnum'>2.</b>Sauvegarde chaque entree dans <code>vault_tokens</code>, avec une expiration de 24h (<b>TTL</b>) — un token ne doit pas rester valable indefiniment.</li><li><b class='stepnum'>3.</b>Ajoute <code>deanonymize(text, session_id) -&gt; str</code> qui relit le Vault et remplace chaque token par sa vraie valeur — l'operation inverse, appliquee sur la reponse du LLM.</li><li><b class='stepnum'>4.</b>Test bout en bout manuel : anonymise un texte -&gt; envoie au LLM -&gt; desanonymise la reponse -&gt; verifie que les vraies valeurs reapparaissent.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc Presidio Anonymizer</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Cycle complet anonymisation -&gt; LLM -&gt; desanonymisation fonctionnel, avec Vault persistant</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Complète la section Sécurité avec le principe du <b>Vault</b> (tokenisation réversible) et un mini-schéma anonymize/deanonymize.</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-blue">06<small>Sem.3</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.3</div>
+      <div class="session-title">LLM Guard — Filtrage Input & Output</div>
+      <div class="session-subtitle">Bloquer les attaques avant le LLM, filtrer les sorties dangereuses apres</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S5 avec un cycle anonymize → LLM → deanonymize fonctionnel grâce au Vault.</div>
+    <p class="session-intro">Deux couches de protection complementaires : en entree, reperer une tentative de manipulation du modele (prompt injection) ; en sortie, verifier que la reponse du LLM ne contient rien de toxique ou de sensible.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">LLM Guard</span><span class="kw">Prompt Injection</span><span class="kw">Jailbreak</span><span class="kw">Toxicity scanner</span><span class="kw">time.perf_counter() (latence)</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">Input scanners</div></div><div class="time-block build"><div class="t">22:00</div><div class="d">Output scanners</div></div><div class="time-block test"><div class="t">23:30</div><div class="d">Mesure latence</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b><code>pip install llm-guard</code>. Cree <code>security_scanner.py</code> avec une classe <code>InputScanner</code> et <code>scan_input(prompt) -&gt; ScanResult(is_safe, risk_score, blocked_reason)</code>, via les scanners <code>PromptInjection</code> et <code>Jailbreak</code>.</li><li><b class='stepnum'>2.</b>Branche-le dans <code>POST /chat</code> : si <code>is_safe == False</code>, HTTP 400 avant meme d'appeler le LLM. Teste avec 5 prompts malveillants classiques ("Ignore all previous instructions", "Act as DAN"…).</li><li><b class='stepnum'>3.</b>Ajoute <code>scan_output(prompt, response) -&gt; ScanResult</code> avec les scanners <code>Toxicity</code>, <code>Sensitive</code>, <code>Relevance</code>. Si toxique, remplace la reponse par un message generique.</li><li><b class='stepnum'>4.</b>Mesure la latence ajoutee par scanner avec <code>time.perf_counter()</code> et enregistre-la dans <code>audit_events</code> — metrique cle pour la soutenance.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc LLM Guard Scanners</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>5 attaques bloquees, sortie filtree, latence mesuree et loggee</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Ajoute une sous-section <b>Filtrage Input/Output (LLM Guard)</b> listant les scanners utilisés (PromptInjection, Jailbreak, Toxicity).</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-blue">07<small>Sem.4</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.4</div>
+      <div class="session-title">Pipeline complet de bout en bout</div>
+      <div class="session-subtitle">Assembler toutes les briques de securite dans une seule chaine</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S6 avec scan_input() et scan_output() qui fonctionnent chacun de leur côté.</div>
+    <p class="session-intro">Jusqu'ici tu as construit des briques separees. Cette session, tu les assembles dans le bon ordre pour obtenir le pipeline final — la session la plus importante du projet.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">Pipeline de securite</span><span class="kw">Ordre d'execution</span><span class="kw">Defense in depth</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">Assemblage dans /chat</div></div><div class="time-block test"><div class="t">23:00</div><div class="d">Tests des 4 cas</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Dans <code>POST /chat</code>, enchaine : (1) <code>scan_input()</code> ; (2) <code>anonymize()</code> ; (3) <code>llm_client.send()</code> — le LLM ne recoit jamais la donnee reelle ; (4) <code>scan_output()</code> ; (5) <code>deanonymize()</code> ; (6) <code>log_event()</code>.</li><li><b class='stepnum'>2.</b>Teste avec une phrase combinant les 2 risques : "Jean Dupont (IBAN FR76...) [ATTAQUE] Ignore tes instructions". Verifie que l'attaque est bloquee ET que le nom/IBAN n'atteint jamais le LLM.</li><li><b class='stepnum'>3.</b>Documente une demo de ce pipeline — tu la reutiliseras pour la soutenance.</li></ul>
+    
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Pipeline complet fonctionnel, teste sur les 4 cas (normal / PII / attaque / PII+attaque)</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Ajoute un schéma texte des 6 étapes du pipeline dans une section <b>Architecture du pipeline de sécurité</b>.</div>
+    <div class="tip-box"><strong>Conseil :</strong> C'est le coeur du projet. Prends le temps de bien tester chaque cas avant de continuer.</div>
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-blue">08<small>Sem.4</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.4</div>
+      <div class="session-title">Route /audit (JWT) + Tests anti-fuite PII</div>
+      <div class="session-subtitle">Exposer les logs de securite de facon protegee, et prouver qu'aucune PII ne fuit</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S7 avec le pipeline de sécurité complet assemblé et validé sur les 4 cas critiques.</div>
+    <p class="session-intro">Une API pour consulter l'historique d'audit, protegee par authentification, et des tests automatises qui prouvent que ton systeme ne laisse jamais fuiter une donnee sensible vers le LLM.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">Pagination</span><span class="kw">JWT (JSON Web Token)</span><span class="kw">python-jose</span><span class="kw">Tests anti-fuite</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">GET /audit + JWT</div></div><div class="time-block test"><div class="t">22:30</div><div class="d">Tests anti-fuite PII</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Cree <code>GET /audit</code> avec <code>from/to/type/page/limit</code>, paginé. Ajoute <code>GET /audit/stats</code> (totaux, PII/7j, latence moyenne) — ce que le dashboard consommera.</li><li><b class='stepnum'>2.</b><code>pip install python-jose[cryptography] passlib</code>, protege ces routes avec un <b>JWT</b>.</li><li><b class='stepnum'>3.</b>Tests pytest anti-fuite : texte avec 5 PII -&gt; mock du LLM -&gt; aucune PII dans ce qui est envoye. Autre test : PII presentes dans la reponse finale apres desanonymisation. Dernier : tokens expirent apres 24h.</li><li><b class='stepnum'>4.</b>Rassemble les resultats dans <code>docs/security_report.md</code>.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc FastAPI JWT Security</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Routes /audit securisees par JWT, tests anti-fuite verts, rapport de securite redige</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Ajoute la section <b>API — Audit</b> : exemples de requêtes <code>GET /audit</code> et <code>/audit/stats</code>, rappel que l'auth JWT est requise.</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-blue">09<small>Sem.5</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.5</div>
+      <div class="session-title">SSE Streaming + Audit securite OWASP</div>
+      <div class="session-subtitle">Faire arriver la reponse en temps reel, puis auditer tout le backend avant le frontend</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S8 avec les routes /audit sécurisées par JWT et des tests anti-fuite PII qui passent.</div>
+    <p class="session-intro">Le backend doit pouvoir streamer ses reponses et avoir passe un dernier controle de securite global — le bon moment, juste avant que le projet grossisse cote frontend.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">SSE (Server-Sent Events)</span><span class="kw">StreamingResponse</span><span class="kw">OWASP API Security Top 10</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">POST /chat/stream</div></div><div class="time-block build"><div class="t">22:00</div><div class="d">Checklist OWASP</div></div><div class="time-block doc"><div class="t">23:30</div><div class="d">Tag v0.2.0</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Implemente <code>POST /chat/stream</code> avec <code>StreamingResponse</code>. Format <b>SSE</b> : <code>data: {"token": "..."}\n\n</code> puis <code>data: [DONE]</code>.</li><li><b class='stepnum'>2.</b>Gere la desanonymisation en streaming : accumule les tokens recus, detecte un token du Vault dans le flux, remplace-le a la volee.</li><li><b class='stepnum'>3.</b>Checklist OWASP API Security Top 10 : routes admin protegees JWT ? erreurs sans details internes ? inputs valides partout ? Vault sans endpoint public ?</li><li><b class='stepnum'>4.</b><code>pytest -v --tb=short</code> zero erreur, puis <code>git tag v0.2.0-security</code>.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc StreamingResponse</a><a class="res-link r-green" href="#">Doc OWASP API Top 10</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Streaming + desanonymisation temps reel fonctionnels, backend audite, tag v0.2.0</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Ajoute la section <b>Streaming</b> avec un exemple d'appel à <code>/chat/stream</code>, mentionne le tag <code>v0.2.0-security</code> et la checklist OWASP passée.</div>
+    
+  </div>
+</div></div></div>
+
+<div id="phase3">
+<div class="section-header"><span class="section-badge s-pink">🖥</span><h2>Frontend React &amp; Dashboard — Sessions 10 à 14</h2></div>
+<p style="color:var(--muted);font-size:13px;margin:-1rem 0 1.2rem">Chat UI, streaming, dashboard Recharts, auth, tests E2E/charge</p>
+<div class="section-divider"></div>
+<div class="session-grid">
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-pink">10<small>Sem.5</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.5</div>
+      <div class="session-title">Setup React/Vite/TS + Chat UI</div>
+      <div class="session-subtitle">Demarrer le frontend type et brancher la premiere interface de chat</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Phase 2 terminée (tag v0.2.0) : backend sécurisé de bout en bout, streaming inclus.</div>
+    <p class="session-intro">Un projet React/TypeScript structure proprement, puis une interface de chat qui parle vraiment a ton backend — avec l'affichage visuel des PII detectees, pour rendre la securite visible a l'ecran.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">Vite</span><span class="kw">React 18</span><span class="kw">TypeScript strict</span><span class="kw">Tailwind CSS</span><span class="kw">Zustand</span><span class="kw">Axios</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">Vite+React+TS+Tailwind</div></div><div class="time-block build"><div class="t">21:30</div><div class="d">Types + structure</div></div><div class="time-block build"><div class="t">22:30</div><div class="d">ChatWindow + API</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b><code>npm create vite@latest frontend -- --template react-ts</code>, installe Tailwind (<code>npm install -D tailwindcss postcss autoprefixer</code>) et <code>npm install zustand axios recharts react-router-dom</code>.</li><li><b class='stepnum'>2.</b>Active le mode strict dans <code>tsconfig.json</code>. Structure <code>src/{components,pages,stores,api,types}</code> et declare tes interfaces dans <code>types/index.ts</code> (<code>ChatMessage</code>, <code>AuditEvent</code>, <code>PIIDetection</code>).</li><li><b class='stepnum'>3.</b>Cree <code>ChatMessage.tsx</code> et <code>ChatWindow.tsx</code>, puis <code>api/chat.ts</code> avec <code>sendMessage()</code> via Axios.</li><li><b class='stepnum'>4.</b>Surligne en jaune les tokens PII detectes (avec infobulle de la vraie valeur), ajoute un badge de risque (vert/orange/rouge) par message.</li><li><b class='stepnum'>5.</b>Ajoute le service frontend a ton <code>docker-compose.yml</code>.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc TypeScript Handbook</a><a class="res-link r-green" href="#">Doc Tailwind+Vite</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Frontend type qui demarre, Chat UI connecte au backend, PII surlignees visuellement</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Ajoute une nouvelle section <b>Frontend</b> : stack utilisée (Vite/React/TS/Tailwind), commandes <code>npm install</code> puis <code>npm run dev</code>.</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-pink">11<small>Sem.6</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.6</div>
+      <div class="session-title">Streaming Chat — token par token</div>
+      <div class="session-subtitle">Connecter le frontend au flux SSE du backend, pour un effet machine a ecrire</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S10 avec un Chat UI connecté au backend, où les PII détectées sont déjà surlignées visuellement.</div>
+    <p class="session-intro">Tu as deja le streaming cote backend (session 9) — ici tu le branches cote React pour que l'utilisateur voie la reponse apparaitre mot par mot.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">fetch + ReadableStream</span><span class="kw">EventSource / Web Streams API</span><span class="kw">useState</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">Parsing SSE</div></div><div class="time-block build"><div class="t">22:30</div><div class="d">Effet typing</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Ajoute <code>sendMessageStream(message, onToken)</code> dans <code>api/chat.ts</code>, avec <code>fetch</code> + <code>ReadableStream</code> pour parser les events SSE au fur et a mesure.</li><li><b class='stepnum'>2.</b>Dans <code>ChatWindow.tsx</code>, met a jour le message assistant token par token via <code>useState</code>, ajoute un curseur anime pendant l'arrivee de la reponse.</li><li><b class='stepnum'>3.</b>Gere le cas ou un token PII se reconstitue en cours de streaming : affiche la vraie valeur avec fond colore.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc MDN Readable Streams</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Reponses streamees token par token dans l'UI, effet typing visible</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Complète la section Frontend avec une capture d'écran du chat en streaming (effet typing).</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-pink">12<small>Sem.6</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.6</div>
+      <div class="session-title">Dashboard — Recharts</div>
+      <div class="session-subtitle">Donner a voir la securite du systeme avec des graphiques clairs</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S11 avec le streaming token par token fonctionnel côté interface (effet 'typing').</div>
+    <p class="session-intro">Le dashboard est ce que tu montreras le plus a la soutenance : il rend visible, en un coup d'oeil, tout le travail de securite fait cote backend.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">Recharts</span><span class="kw">BarChart / LineChart / PieChart</span><span class="kw">Pagination</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">3 graphiques</div></div><div class="time-block build"><div class="t">23:00</div><div class="d">Donnees reelles + pagination</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Cree <code>DashboardPage.tsx</code> en grille 2x2 : <code>BarChart</code> (PII/jour sur 7j), <code>LineChart</code> (latence moyenne/heure), <code>PieChart</code> (repartition PII/Jailbreak/Toxicite/Normal).</li><li><b class='stepnum'>2.</b>4 cartes de stats en haut (total messages, PII detectees, attaques bloquees, latence moyenne) depuis <code>GET /audit/stats</code>.</li><li><b class='stepnum'>3.</b>Tableau des derniers evenements avec pagination (10/page).</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc Recharts Examples</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Dashboard avec 3 graphiques + 4 stats + tableau pagine, connecte aux vraies donnees</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Ajoute une capture du Dashboard et une description rapide des 3 graphiques affichés.</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-pink">13<small>Sem.7</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.7</div>
+      <div class="session-title">Auth JWT + Filtres/Export CSV</div>
+      <div class="session-subtitle">Proteger l'acces au dashboard et le rendre exploitable au quotidien</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S12 avec un Dashboard Recharts connecté aux vraies données d'audit du backend.</div>
+    <p class="session-intro">Une vraie authentification cote frontend pour ne pas laisser le dashboard ouvert a tous, et des filtres + export pour que les donnees d'audit soient reellement utilisables.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">JWT cote client</span><span class="kw">Zustand (state management)</span><span class="kw">PrivateRoute</span><span class="kw">Blob (export fichier)</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">Login + PrivateRoute</div></div><div class="time-block build"><div class="t">22:00</div><div class="d">Filtres + export CSV</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Cree <code>LoginPage.tsx</code> et un store Zustand <code>authStore.ts</code> avec <code>token</code>, <code>login()</code>, <code>logout()</code>. Stocke le JWT en memoire (pas de localStorage, plus sur contre le XSS).</li><li><b class='stepnum'>2.</b>Cree <code>PrivateRoute</code> qui redirige vers <code>/login</code> si non connecte, protege <code>/dashboard</code>. Ajoute un intercepteur Axios pour <code>Authorization: Bearer {token}</code>.</li><li><b class='stepnum'>3.</b>Filtres au tableau (date, type, severite) qui mettent a jour graphiques + tableau en meme temps.</li><li><b class='stepnum'>4.</b>Export CSV sans librairie externe : JSON -&gt; texte CSV -&gt; <code>Blob</code> -&gt; telechargement via lien temporaire.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc Zustand</a><a class="res-link r-green" href="#">Doc React Router</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Login fonctionnel, dashboard protege par JWT, filtres et export CSV operationnels</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Ajoute la section <b>Authentification</b> : comment se logger (compte de test), rappel que le JWT est stocké en mémoire (pas de localStorage).</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-pink">14<small>Sem.7</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.7</div>
+      <div class="session-title">Tests E2E (Playwright) + Charge (Locust) + Polish</div>
+      <div class="session-subtitle">Verifier que tout fonctionne ensemble, et mesurer la tenue en charge</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S13 avec un dashboard protégé par JWT, des filtres et un export CSV opérationnels.</div>
+    <p class="session-intro">Des tests qui simulent un vrai utilisateur de bout en bout dans le navigateur, et un test de charge pour avoir des chiffres concrets sur la performance.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">Playwright (E2E)</span><span class="kw">Locust (load testing)</span><span class="kw">p50/p95/p99 (percentiles)</span></div>
+    <div class="timing-strip"><div class="time-block test"><div class="t">20:00</div><div class="d">5 scenarios Playwright</div></div><div class="time-block test"><div class="t">22:00</div><div class="d">Locust</div></div><div class="time-block build"><div class="t">23:30</div><div class="d">Polish + tag</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b><code>npm init playwright@latest</code>, ecris 5 scenarios : login OK -&gt; dashboard ; login KO -&gt; erreur ; envoi message -&gt; reponse ; texte+email -&gt; token [EMAIL_1] visible ; dashboard sans login -&gt; redirection.</li><li><b class='stepnum'>2.</b><code>pip install locust</code>, ecris <code>locustfile.py</code> simulant 50 utilisateurs, lance avec <code>locust --host=http://localhost:8000</code>. Note les latences <b>p50/p95/p99</b> avec et sans la couche securite.</li><li><b class='stepnum'>3.</b>Corrige les derniers bugs visuels (responsive, erreurs, loading), <code>git tag v0.3.0-frontend</code>.</li></ul>
+    <div class="resource-row"><a class="res-link r-blue" href="#">Doc Playwright</a><a class="res-link r-green" href="#">Doc Locust Quickstart</a></div>
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>5 tests E2E qui passent, rapport de performance chiffre, tag v0.3.0</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Enrichis la section Tests avec <code>npx playwright test</code> et un tableau des résultats Locust (p50/p95/p99) ; mentionne le tag <code>v0.3.0-frontend</code>.</div>
+    
+  </div>
+</div></div></div>
+
+<div id="phase4">
+<div class="section-header"><span class="section-badge s-amber">🎤</span><h2>Finalisation &amp; Soutenance — Sessions 15 à 17</h2></div>
+<p style="color:var(--muted);font-size:13px;margin:-1rem 0 1.2rem">Docs, build prod, slides, répétitions</p>
+<div class="section-divider"></div>
+<div class="session-grid">
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-amber">15<small>Sem.8</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.8</div>
+      <div class="session-title">Docs techniques + Docker prod</div>
+      <div class="session-subtitle">Rendre le projet comprehensible et lancable par quelqu'un d'autre</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Phase 3 terminée (tag v0.3.0) : frontend complet, validé par des tests E2E et un test de charge.</div>
+    <p class="session-intro">Un projet qui marche sur ta machine mais que personne ne peut comprendre ou relancer perd beaucoup de valeur. Documentation complete + build Docker propre pour la production.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">Swagger / OpenAPI</span><span class="kw">ADR (Architecture Decision Record)</span><span class="kw">Multi-stage build</span><span class="kw">.env.example</span></div>
+    <div class="timing-strip"><div class="time-block doc"><div class="t">20:00</div><div class="d">README + ADRs</div></div><div class="time-block build"><div class="t">22:00</div><div class="d">docker-compose prod</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>README final : intro, schema d'architecture, fonctionnalites, install en 5 commandes max, exemples. Verifie que Swagger (genere par FastAPI sur <code>/docs</code>) documente bien toutes tes routes.</li><li><b class='stepnum'>2.</b><code>docs/architecture_decisions.md</code> — un <b>ADR</b> explique pourquoi telle techno : Presidio vs alternative, SQLite vs PostgreSQL, FastAPI vs Django. Question classique en soutenance.</li><li><b class='stepnum'>3.</b><code>docs/demo_scenario.md</code> : le script exact de ta demo (phrases precises a taper, resultats attendus).</li><li><b class='stepnum'>4.</b><code>docker-compose.prod.yml</code> avec <b>multi-stage build</b>, et <code>.env.example</code> listant les variables sans les vraies valeurs.</li></ul>
+    
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>README complet, Swagger fonctionnel, ADRs rediges, build prod Docker operationnel</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Réécris le README au complet : intro, archi, install en 5 commandes, lien vers les ADRs, instructions de build prod.</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-amber">16<small>Sem.8</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.8</div>
+      <div class="session-title">Slides de soutenance</div>
+      <div class="session-subtitle">Construire le support qui raconte ton projet en 10-15 minutes</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S15 avec une documentation technique complète (README, Swagger, ADRs) et un build Docker prod qui tourne.</div>
+    <p class="session-intro">Les slides structurent ton discours le jour J. Une bonne slide = une idee, peu de texte, et le schema qui parle pour toi.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">Storytelling technique</span><span class="kw">Slide = 1 idee</span><span class="kw">Demo live</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">Rediger les 10 slides</div></div><div class="time-block doc"><div class="t">23:30</div><div class="d">Relecture + timing</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Trame en 10 slides : (1) Titre/contexte ; (2) Solution (schema) ; (3) Stack technique ; (4-5) Fonctionnalites detaillees (anonymisation+vault, filtrage I/O) ; (6) Demo live ; (7) Metriques (taux PII, latence p50/p95, attaques bloquees) ; (8) Difficultes (PII FR, streaming+desanonymisation) ; (9) Bilan/ameliorations ; (10) Questions.</li><li><b class='stepnum'>2.</b>Pour chaque slide : si le jury n'a que 10 secondes dessus, qu'est-ce qu'il doit retenir ? Coupe le superflu.</li><li><b class='stepnum'>3.</b>Estime un timing par slide pour rester dans le creneau.</li></ul>
+    
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>10 slides completes, timing estime par slide, scenario de demo defini</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Pas de changement du README aujourd'hui — crée plutôt <code>docs/demo_scenario.md</code> et lie-le à tes slides.</div>
+    
+  </div>
+</div>
+<div class="session-card">
+  <div class="session-head" onclick="toggleSession(this)">
+    <div class="session-num c-amber">17<small>Sem.9</small></div>
+    <div class="session-title-block">
+      <div class="session-date">Sem.9</div>
+      <div class="session-title">Repetitions + Session finale</div>
+      <div class="session-subtitle">Te chronometrer, corriger les derniers details, livrer la version finale</div>
+    </div>
+    <div class="session-toggle"><div class="toggle-btn">▼</div></div>
+  </div>
+  <div class="session-body">
+    <div class="recap-box"><strong>↩ Recap session précédente :</strong> Tu sors de S16 avec 10 slides de soutenance rédigées et un scénario de démo défini.</div>
+    <p class="session-intro">Tu repetes a voix haute pour calibrer le timing, corriges ce qui coince, et fais le tag final du projet.</p>
+    <div class="kw-label">Mots-clés à connaître</div>
+    <div class="kw-row"><span class="kw">Chronometrage</span><span class="kw">Demo reproductible</span><span class="kw">git tag v1.0.0</span></div>
+    <div class="timing-strip"><div class="time-block build"><div class="t">20:00</div><div class="d">Repetition chronometree</div></div><div class="time-block build"><div class="t">21:30</div><div class="d">Corrections + questions</div></div><div class="time-block doc"><div class="t">23:30</div><div class="d">Tag final + bilan</div></div></div>
+    <div class="step-label">Étapes</div>
+    <ul class="step-list"><li><b class='stepnum'>1.</b>Presente toute la soutenance a voix haute en te chronometrant — vise 10-15 minutes. Note ce qui ne coule pas : transitions, slides trop chargees.</li><li><b class='stepnum'>2.</b>Lance la demo complete sans filet : login -&gt; phrase test -&gt; tokens affiches -&gt; dashboard mis a jour. Aucune intervention manuelle en coulisses.</li><li><b class='stepnum'>3.</b>Prepare une reponse courte a : "Comment gerez-vous les faux positifs ?", "Quelle latence ajoutee ?", "Comment etendre a d'autres langues ?"</li><li><b class='stepnum'>4.</b><code>pytest -v</code> et <code>npx playwright test</code> — zero echec. Verifie que le README permet de lancer le projet en 10 min.</li><li><b class='stepnum'>5.</b><code>git tag v1.0.0 && git push && git push --tags</code>, bilan personnel d'une page.</li></ul>
+    
+    <div class="deliverable-box"><strong>Livrable :</strong> <span>Tag v1.0.0, README verifiable en 10 minutes, demo qui tourne sans intervention</span></div>
+    <div class="readme-box"><strong>📝 À ajouter dans le README :</strong> Dernière relecture du README (un inconnu peut-il lancer le projet en 10 min ?), ajoute le bilan personnel en bas de page, vérifie le tag <code>v1.0.0</code>.</div>
+    <div class="tip-box"><strong>Conseil :</strong> Projet livre : gateway de securite IA complete — anonymisation reversible, filtrage I/O, vault persistant, dashboard d'audit, frontend React, tests E2E — en solo en ~2 mois.</div>
+  </div>
+</div></div></div>
+
+<div id="stack" class="section-header" style="margin-top:1rem">
+  <span class="section-badge s-teal">Stack</span>
+  <h2>🧱 Architecture technique complète</h2>
+</div>
+<div class="section-divider"></div>
+<div class="stack-wrap">
+  <div class="stack-card"><h4><div class="stack-icon si-teal">PY</div> Backend</h4><ul>
+    <li><b>FastAPI</b> — framework principal</li><li><b>Python 3.11+</b> — async/await</li><li><b>Pydantic v2</b> — validation</li><li><b>SQLAlchemy</b> + aiosqlite</li><li><b>python-jose</b> — JWT</li><li><b>httpx</b></li></ul></div>
+  <div class="stack-card"><h4><div class="stack-icon si-blue">IA</div> Sécurité IA</h4><ul>
+    <li><b>Microsoft Presidio</b> — PII</li><li><b>SpaCy fr_core_news_md</b></li><li><b>LLM Guard</b> — filtrage I/O</li><li><b>LiteLLM</b> — proxy LLM</li><li><b>Vault SQLite</b></li></ul></div>
+  <div class="stack-card"><h4><div class="stack-icon si-pink">TS</div> Frontend</h4><ul>
+    <li><b>React 18</b> + Vite</li><li><b>TypeScript</b> strict</li><li><b>Tailwind CSS</b></li><li><b>Recharts</b></li><li><b>Zustand</b></li><li><b>React Router</b></li></ul></div>
+  <div class="stack-card"><h4><div class="stack-icon si-amber">🧪</div> Tests &amp; Ops</h4><ul>
+    <li><b>pytest</b> + pytest-asyncio</li><li><b>Playwright</b> — E2E</li><li><b>Locust</b> — charge</li><li><b>Docker</b> + compose</li><li><b>GitHub Actions</b> — CI</li></ul></div>
+</div>
+
+</div>
+
+<footer>
+  <strong>Gateway de Sécurité IA &amp; Anonymisation Réversible</strong> · Réf. 01-2026 · Version condensée &amp; guidée<br>
+  17 sessions · ~68 heures de travail
+</footer>
+
+<script>
+function toggleSession(headEl) {
+  const card = headEl.closest('.session-card');
+  const body = card.querySelector('.session-body');
+  const btn = card.querySelector('.toggle-btn');
+  const isOpen = card.classList.contains('open');
+  card.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+  btn.textContent = isOpen ? '▼' : '▲';
+}
+</script>
+</body>
+</html>

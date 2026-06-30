@@ -3,7 +3,6 @@ from crud import create_token, get_token, delete_expired_tokens
 from datetime import datetime, timedelta
 
 
-@pytest.mark.asyncio
 async def test_create_and_get_token():
     await create_token("[TEST_TOKEN]", "Valeur Test", "PERSON", "session-pytest")
     token = await get_token("[TEST_TOKEN]")
@@ -13,7 +12,6 @@ async def test_create_and_get_token():
     assert token.entity_type == "PERSON"
 
 
-@pytest.mark.asyncio
 async def test_get_nonexistent_token():
     token = await get_token("[TOKEN_INEXISTANT]")
     assert token is None

@@ -74,4 +74,4 @@ Projet réalisé en solo dans le cadre d'un stage de fin d'études (BUT3 Informa
 
 ## 👤 Auteur
 
-Maher Bouchrara - junior software engineer
+Maher Bouchrara - Junior Software Engineer

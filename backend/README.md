@@ -2,7 +2,7 @@
 
 API FastAPI qui implémente le pipeline de sécurité complet : scan d'entrée, anonymisation/désanonymisation via Vault, appel au LLM, scan de sortie, audit.
 
-## 🧱 Stack 0
+## 🧱 Stack
 
 - **FastAPI** + **Pydantic v2** — API REST et validation des données
 - **SQLAlchemy** (async) + **aiosqlite** — persistance (Vault, audit, utilisateurs)

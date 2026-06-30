@@ -49,7 +49,7 @@ GATEWAYIA/
 ## 🚀 Démarrage rapide
 
 ```bash
-git clone <url-du-repo>
+git clone https://github.com/Maher-bouchrara/ai-security-gateway.git
 cd GATEWAYIA
 cp backend/.env.example backend/.env   # renseigner sa clé API LLM
 docker-compose up --build

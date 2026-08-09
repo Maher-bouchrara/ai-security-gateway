@@ -8,5 +8,5 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     reply: str
-    tokens_used: int = 0 
+    llm_tokens_used: int = 0 
     pii_detected: int = 0

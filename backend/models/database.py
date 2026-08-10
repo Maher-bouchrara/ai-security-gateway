@@ -17,7 +17,7 @@ Base = declarative_base()
 class VaultToken(Base):
     __tablename__ = "vault_tokens"
     id = Column(Integer, primary_key=True)
-    token = Column(String(64), unique=True, index=True)
+    token = Column(String(64), index=True)
     original_value = Column(String, nullable=False)
     entity_type = Column(String(32), nullable=False)
     session_id = Column(String(64), index=True)

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import select, delete
 from models.database import async_session, VaultToken
 
@@ -7,12 +7,14 @@ async def create_token(token: str, original_value: str,
                        entity_type: str, session_id: str,
                        ttl_hours: int = 24):
     async with async_session() as db:
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
         new_token = VaultToken(
             token=token,
             original_value=original_value,
             entity_type=entity_type,
             session_id=session_id,
-            expires_at=datetime.utcnow() + timedelta(hours=ttl_hours),
+            created_at=now,
+            expires_at=now + timedelta(hours=ttl_hours),
         )
         db.add(new_token)
         await db.commit()
@@ -20,36 +22,37 @@ async def create_token(token: str, original_value: str,
 
 
 async def save_mapping(mapping: dict, session_id: str):
-    """Sauvegarde tout le mapping token → valeur en DB d'un coup."""
     async with async_session() as db:
         for token, original_value in mapping.items():
-            # Extraire le type d'entité depuis le token ex. [PERSON_1] → PERSON
-            
-            # Vérifier si le token existe déjà avant d'insérer
             existing = await db.execute(
-                select(VaultToken).where(VaultToken.token == token)
+                select(VaultToken).where(
+                    VaultToken.token == token,
+                    VaultToken.session_id == session_id
+                )
             )
             if existing.scalar_one_or_none() is not None:
-                continue  # déjà en DB, on skip
-            
+                continue
+
             entity_type = token.strip("[]").rsplit("_", 1)[0]
+            now = datetime.now(timezone.utc).replace(tzinfo=None)
             db.add(VaultToken(
                 token=token,
                 original_value=original_value,
                 entity_type=entity_type,
                 session_id=session_id,
-                expires_at=datetime.utcnow() + timedelta(hours=24),
+                created_at=now,
+                expires_at=now + timedelta(hours=24),
             ))
         await db.commit()
 
-
 async def get_mapping(session_id: str) -> dict:
-    """Récupère tout le mapping d'une session depuis le Vault."""
+    """Récupère tout le mapping d'une session depuis le Vault (tokens non expirés)."""
     async with async_session() as db:
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
         result = await db.execute(
             select(VaultToken).where(
                 VaultToken.session_id == session_id,
-                VaultToken.expires_at > datetime.utcnow()
+                VaultToken.expires_at > now
             )
         )
         tokens = result.scalars().all()
@@ -66,7 +69,8 @@ async def get_token(token: str):
 
 async def delete_expired_tokens():
     async with async_session() as db:
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
         await db.execute(
-            delete(VaultToken).where(VaultToken.expires_at < datetime.utcnow())
+            delete(VaultToken).where(VaultToken.expires_at < now)
         )
         await db.commit()

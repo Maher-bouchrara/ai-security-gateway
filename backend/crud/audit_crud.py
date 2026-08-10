@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from models.database import async_session, AuditEvent
+from typing import Optional
 
 
 async def log_event(session_id: str, event_type: str, severity: str = "low",
@@ -15,8 +16,12 @@ async def log_event(session_id: str, event_type: str, severity: str = "low",
         await db.commit()
         return event
 
-
-async def get_events(limit: int = 50):
+async def get_events(limit: int = 50, offset: int = 0,
+                     event_type: Optional[str] = None) -> list:
     async with async_session() as db:
-        result = await db.execute(select(AuditEvent).order_by(AuditEvent.created_at.desc()).limit(limit))
+        query = select(AuditEvent).order_by(AuditEvent.created_at.desc())
+        if event_type:
+            query = query.where(AuditEvent.event_type == event_type)
+        query = query.limit(limit).offset(offset)
+        result = await db.execute(query)
         return result.scalars().all()

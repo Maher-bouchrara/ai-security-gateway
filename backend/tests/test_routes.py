@@ -13,7 +13,7 @@ def test_health():
 
 @patch("main.send_to_llm")
 def test_chat(mock_send_to_llm):
-    mock_send_to_llm.return_value = "Réponse simulée du LLM"
+    mock_send_to_llm.return_value = ("Réponse simulée du LLM", 100)  # ← tuple
 
     response = client.post("/chat", json={
         "message": "Bonjour",
@@ -25,3 +25,4 @@ def test_chat(mock_send_to_llm):
     data = response.json()
     assert data["reply"] == "Réponse simulée du LLM"
     mock_send_to_llm.assert_called_once()
+    

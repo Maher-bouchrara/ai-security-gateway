@@ -12,6 +12,8 @@ from models.database import init_db ,async_session, AuditEvent
 from models.schemas import ChatRequest, ChatResponse, LoginRequest, TokenResponse, AuditEventSchema, AuditStatsSchema
 from services.auth import verify_password, create_access_token, get_current_user
 from crud import save_mapping, get_mapping, log_event ,create_user, get_user_by_email
+from fastapi.responses import StreamingResponse
+import asyncio
 import time
 
 detector = PIIDetector()
@@ -104,7 +106,98 @@ async def chat(request: ChatRequest):
         pii_detected=anonymize_result.entity_count
     )
     
-    
+@app.post("/chat/stream")
+async def chat_stream(request: ChatRequest):
+    """Pipeline complet en mode streaming SSE."""
+
+    # Étape 1 — Anonymiser
+    anonymize_result = detector.anonymize(request.message)
+
+    # Étape 2 — Scanner le message original
+    input_scan = input_scanner.scan(request.message)
+    if not input_scan.is_safe:
+        await log_event(
+            session_id=request.session_id,
+            event_type="PROMPT_INJECTION",
+            severity="critical",
+            risk_score=input_scan.risk_score,
+            latency_ms=input_scan.latency_ms,
+            blocked=True
+        )
+        raise HTTPException(
+            status_code=400,
+            detail=f"Message bloqué : {input_scan.blocked_reason}"
+        )
+
+    # Étape 3 — Sauvegarder le mapping
+    if anonymize_result.mapping:
+        await save_mapping(anonymize_result.mapping, request.session_id)
+
+    # Étape 4 — Récupérer le mapping pour la désanonymisation
+    mapping = await get_mapping(request.session_id)
+
+    async def generate():
+        try:
+            from litellm import completion
+            import os
+
+            response = completion(
+                model=os.getenv("GROQ_MODEL"),
+                messages=[{"role": "user", "content": anonymize_result.anonymized_text}],
+                api_key=os.getenv("GROQ_API_KEY"),
+                stream=True
+            )
+
+            buffer = ""
+
+            for chunk in response:
+                delta = chunk.choices[0].delta.content
+                if delta is None:
+                    continue
+
+                buffer += delta
+
+                # Envoyer seulement quand on a un mot complet
+                # (quand le buffer se termine par un espace ou ponctuation)
+                if buffer.endswith((" ", "\n", ".", ",", "!", "?", ":", ";")):
+                    # Désanonymiser le buffer complet
+                    deanonymized = buffer
+                    for token, value in mapping.items():
+                        deanonymized = deanonymized.replace(token, value)
+
+                    yield f"data: {deanonymized}\n\n"
+                    buffer = ""
+
+            # Envoyer ce qui reste dans le buffer
+            if buffer:
+                deanonymized = buffer
+                for token, value in mapping.items():
+                    deanonymized = deanonymized.replace(token, value)
+                yield f"data: {deanonymized}\n\n"
+
+            yield "data: [DONE]\n\n"
+
+            await log_event(
+                session_id=request.session_id,
+                event_type="PII_DETECTED" if anonymize_result.entity_count > 0 else "NORMAL",
+                severity="high" if anonymize_result.entity_count > 0 else "low",
+                pii_count=anonymize_result.entity_count,
+                risk_score=input_scan.risk_score,
+                latency_ms=0
+            )
+
+        except Exception as e:
+            yield f"data: [ERROR] {str(e)}\n\n"
+        
+    return StreamingResponse(
+        generate(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no"
+        }
+    )
+       
 # ─── AUTH ────────────────────────────────────────────────
 
 @app.post("/auth/register", status_code=201)

@@ -1,5 +1,5 @@
 # Gateway IA — Description complète du projet
-> Dernière mise à jour : fin Session 7 / Phase 2 en cours · Prochaine : Session 8
+> Dernière mise à jour : fin Session 9 / Phase 2 terminée ✅ · Tag `v0.2.0-security` · Prochaine : Session 10
 
 ---
 
@@ -20,7 +20,7 @@
 | Anonymisation dynamique par Vaulting | Détection PII via Presidio, remplacement par tokens avant envoi au LLM | S4, S5 ✅ |
 | Sécurisation des flux (Input/Output) | Filtrage injections de prompt (jailbreak) en entrée, toxicité en sortie via LLM Guard | S6 ✅ |
 | Matching inverse / Désanonymisation | Réinjection des vraies données dans la réponse via Vault local | S5 ✅, S7 ✅ |
-| Dashboard d'Audit | Suivi des tentatives d'exfiltration et de la latence ajoutée par la sécurité | S8, S12–S14 |
+| Dashboard d'Audit | Suivi des tentatives d'exfiltration et de la latence ajoutée par la sécurité | S8 ✅ (backend), S12–S14 (frontend) |
 
 ---
 
@@ -28,7 +28,7 @@
 
 ```
 Utilisateur (Frontend React)
-    ↓ POST /chat
+    ↓ POST /chat  ou  POST /chat/stream
 Gateway API (FastAPI)
     ↓
 ┌─────────────────────────────────────────────────────────┐
@@ -37,32 +37,32 @@ Gateway API (FastAPI)
 │  "Marie Martin" → [PERSON_1]                           │
 │  Mapping sauvegardé dans vault_tokens (TTL 24h)        │
 └─────────────────────────────────────────────────────────┘
-    ↓ texte anonymisé
+    ↓ message original (pas l'anonymisé — important !)
 ┌─────────────────────────────────────────────────────────┐
 │  ÉTAPE 2 — scan_input()                                 │
 │  Scanner hybride 3 couches :                           │
-│  1. Regex patterns connus (prompt injection)           │
+│  1. Regex patterns connus (prompt injection FR + EN)   │
 │  2. Filtre contexte PII (évite faux positifs)          │
-│  3. LLM Guard (filet de sécurité)                      │
+│  3. LLM Guard PromptInjection (threshold=0.99)         │
 │  → si bloqué : HTTP 400, log PROMPT_INJECTION          │
 └─────────────────────────────────────────────────────────┘
-    ↓ si safe
+    ↓ si safe — texte anonymisé envoyé au LLM
 ┌─────────────────────────────────────────────────────────┐
 │  ÉTAPE 3 — LLM Cloud (via LiteLLM → Groq)              │
 │  Reçoit uniquement le texte tokenisé                   │
 │  Ne voit jamais les vraies données personnelles        │
 └─────────────────────────────────────────────────────────┘
-    ↓ réponse (avec tokens)
+    ↓ réponse (avec tokens) — chunk par chunk si streaming
 ┌─────────────────────────────────────────────────────────┐
 │  ÉTAPE 4 — scan_output()                                │
-│  LLM Guard — Toxicity scanner                          │
+│  Regex FR (insultes) + LLM Guard Toxicity              │
 │  → si toxique : HTTP 400, log TOXIC_OUTPUT             │
 └─────────────────────────────────────────────────────────┘
     ↓ si safe
 ┌─────────────────────────────────────────────────────────┐
 │  ÉTAPE 5 — deanonymize()                                │
 │  Vault lookup : [PERSON_1] → "Marie Martin"            │
-│  Réinjecte les vraies valeurs dans la réponse          │
+│  En streaming : buffer par mot pour éviter coupure     │
 └─────────────────────────────────────────────────────────┘
     ↓
 ┌─────────────────────────────────────────────────────────┐
@@ -80,7 +80,7 @@ Utilisateur (réponse finale avec vraies valeurs)
 
 | Couche | Technologies |
 |---|---|
-| **Backend** | Python 3.11, FastAPI, Pydantic v2, SQLAlchemy (async), aiosqlite, python-jose (JWT) |
+| **Backend** | Python 3.11, FastAPI, Pydantic v2, SQLAlchemy (async), aiosqlite, python-jose (JWT), passlib, bcrypt==4.0.1 |
 | **Sécurité IA** | Microsoft Presidio, SpaCy (fr_core_news_md), LLM Guard, LiteLLM |
 | **LLM** | Groq (modèle `openai/gpt-oss-20b`) via LiteLLM — gratuit |
 | **Frontend** | React 18, TypeScript, Vite, Tailwind CSS, Zustand, Recharts, React Router |
@@ -100,28 +100,31 @@ GATEWAYIA/                              ← racine du repo
 │   ├── venv/                           ← environnement virtuel Python 3.11 (gitignored)
 │   ├── models/
 │   │   ├── __init__.py
-│   │   ├── schemas.py                  ← modèles Pydantic (ChatRequest, ChatResponse)
-│   │   └── database.py                 ← modèles SQLAlchemy + init_db() + UniqueConstraint
+│   │   ├── schemas.py                  ← ChatRequest, ChatResponse, LoginRequest, TokenResponse, AuditEventSchema, AuditStatsSchema
+│   │   └── database.py                 ← VaultToken, AuditEvent, User + init_db() + UniqueConstraint
 │   ├── services/
 │   │   ├── __init__.py
 │   │   ├── llm_client.py               ← wrapper LiteLLM → Groq (reply + tokens_used)
 │   │   ├── anonymizer.py               ← PIIDetector + anonymize() + deanonymize() + custom recognizers TN/FR
-│   │   └── security_scanner.py         ← InputScanner hybride (regex+PII+LLMGuard) + OutputScanner
+│   │   ├── security_scanner.py         ← InputScanner hybride (regex+PII+LLMGuard) + OutputScanner (regex FR + LLMGuard)
+│   │   └── auth.py                     ← hash_password, verify_password, create_access_token, decode_token, get_current_user
 │   ├── crud/
 │   │   ├── __init__.py                 ← réexporte tout proprement
 │   │   ├── vault_crud.py               ← create_token, get_token, save_mapping, get_mapping, delete_expired_tokens
-│   │   └── audit_crud.py               ← log_event, get_events
+│   │   ├── audit_crud.py               ← log_event, get_events (paginé + filtrable)
+│   │   └── user_crud.py                ← create_user, get_user_by_email
 │   ├── tests/
 │   │   ├── __init__.py
 │   │   ├── conftest.py                 ← init_db() avant les tests, drop_all après
 │   │   ├── test_routes.py              ← tests /health et /chat (mock LLM)
 │   │   ├── test_vault_crud.py          ← tests create_token, get_token
-│   │   └── test_audit_crud.py          ← tests log_event, get_events
-│   ├── main.py                         ← pipeline complet : anonymize→scan→LLM→scan→deanonymize→log
+│   │   ├── test_audit_crud.py          ← tests log_event, get_events
+│   │   └── test_antifuite.py           ← 5 tests : PII jamais envoyées au LLM
+│   ├── main.py                         ← pipeline complet + /chat/stream SSE + routes auth + routes audit
 │   ├── Dockerfile                      ← image python:3.11-slim
 │   ├── requirements.txt                ← dépendances figées (pip freeze)
 │   ├── pytest.ini                      ← asyncio_mode = auto
-│   ├── .env                            ← GROQ_API_KEY + GROQ_MODEL (gitignored)
+│   ├── .env                            ← GROQ_API_KEY + GROQ_MODEL + SECRET_KEY (gitignored)
 │   ├── .env.example                    ← modèle vide commité
 │   ├── .dockerignore
 │   └── gateway.db                      ← SQLite (gitignored, créé au démarrage)
@@ -129,6 +132,7 @@ GATEWAYIA/                              ← racine du repo
 ├── docs/
 │   ├── README.md
 │   ├── pii_spec.md                     ← spécification des 14 entités PII (FR + TN)
+│   ├── security_report.md              ← rapport de sécurité + checklist OWASP
 │   └── architecture.excalidraw         ← schéma d'architecture
 ├── docker-compose.yml                  ← service backend avec volume + hot-reload
 ├── Architecture-GatewayIA.html         ← schémas visuels du système
@@ -158,13 +162,22 @@ GATEWAYIA/                              ← racine du repo
 |---|---|---|
 | `id` | INTEGER PK | Identifiant unique |
 | `session_id` | VARCHAR(64) | Session concernée |
-| `event_type` | VARCHAR(32) | NORMAL, PII_DETECTED, PROMPT_INJECTION, JAILBREAK, TOXIC_OUTPUT |
+| `event_type` | VARCHAR(32) | NORMAL, PII_DETECTED, PROMPT_INJECTION, TOXIC_OUTPUT |
 | `severity` | VARCHAR(16) | low / medium / high / critical |
 | `pii_count` | INTEGER | Nombre de PII détectées |
 | `risk_score` | FLOAT | Score 0.0 → 1.0 |
 | `latency_ms` | INTEGER | Latence totale du pipeline (ms) |
 | `blocked` | BOOLEAN | Vrai si requête bloquée avant le LLM |
 | `created_at` | DATETIME | Horodatage UTC |
+
+### Table `users`
+| Colonne | Type | Description |
+|---|---|---|
+| `id` | INTEGER PK | Identifiant unique |
+| `email` | VARCHAR(120) UNIQUE | Identifiant de connexion |
+| `hashed_password` | VARCHAR(255) | Mot de passe haché bcrypt (jamais en clair) |
+| `role` | VARCHAR(16) | `admin` ou `viewer` (défaut: viewer) |
+| `created_at` | DATETIME | Date de création UTC |
 
 ---
 
@@ -185,7 +198,7 @@ GATEWAYIA/                              ← racine du repo
 | Date | `DATE_TIME` | ✅ | ✅ | 0.85 | Presidio natif |
 | Localisation | `LOCATION` | ✅ | ✅ | 0.85 | SpaCy FR |
 
-Détail complet : `docs/pii_spec.md`
+Détail complet + cas limites : `docs/pii_spec.md` · Résultats des tests : `docs/security_report.md`
 
 ---
 
@@ -195,10 +208,12 @@ Détail complet : `docs/pii_spec.md`
 |---|---|---|---|
 | GET | `/health` | non | ✅ Implémenté |
 | POST | `/chat` | non | ✅ Pipeline complet (6 étapes) |
-| POST | `/chat/stream` | non | 🔜 Session 9 |
-| GET | `/audit` | JWT | 🔜 Session 8 |
-| GET | `/audit/stats` | JWT | 🔜 Session 8 |
-| POST | `/auth/login` | non | 🔜 Session 8 |
+| POST | `/chat/stream` | non | ✅ SSE streaming + désanonymisation buffer |
+| POST | `/auth/register` | non | ✅ Crée un compte (hash bcrypt) |
+| POST | `/auth/login` | non | ✅ Retourne un JWT (60 min) |
+| POST | `/auth/token` | non | ✅ Compatible formulaire Swagger (caché dans la doc) |
+| GET | `/audit` | JWT | ✅ Historique paginé + filtrable |
+| GET | `/audit/stats` | JWT | ✅ Totaux + répartition par type |
 
 ---
 
@@ -206,103 +221,72 @@ Détail complet : `docs/pii_spec.md`
 
 ### Phase 1 — Fondations (Sessions 1–3) · TAG `v0.1.0-foundation`
 
-#### Session 1 — Setup + Architecture + Squelette API ✅
-- [x] Repo GitHub créé (`ai-security-gateway`)
-- [x] Structure de dossiers créée (`backend/`, `frontend/`, `docs/`)
-- [x] Venv Python 3.11 créé et activé (Windows)
-- [x] Dépendances installées : FastAPI, uvicorn, Pydantic, httpx, python-dotenv, openai, LiteLLM
-- [x] `.env` / `.env.example` / `.gitignore` configurés
-- [x] Schéma d'architecture Excalidraw généré (`docs/architecture.excalidraw`)
-- [x] Modèles Pydantic : `ChatRequest`, `ChatResponse` (`models/schemas.py`)
-- [x] Service LLM : `services/llm_client.py` avec LiteLLM → Groq (`openai/gpt-oss-20b`)
-- [x] Routes FastAPI : `GET /health`, `POST /chat`
-- [x] CORS configuré pour le futur frontend (`http://localhost:5173`)
-- [x] Test Swagger sur `/docs` validé
+#### Session 1 ✅ · Session 2 ✅ · Session 3 ✅
+*(voir versions précédentes du fichier pour le détail)*
+- Backend FastAPI + LiteLLM/Groq · DB SQLite + CRUD · Docker + CI · 11 tests verts
 
-#### Session 2 — Persistance (Vault & Audit) + Docker ✅
-- [x] Dépendances DB : SQLAlchemy (async), aiosqlite
-- [x] Modèles SQLAlchemy : `VaultToken`, `AuditEvent` (`models/database.py`)
-- [x] `init_db()` avec lifespan FastAPI
-- [x] CRUD séparés par modèle (`crud/vault_crud.py`, `crud/audit_crud.py`)
-- [x] `Dockerfile` + `docker-compose.yml` (volume code + hot-reload)
-- [x] `.dockerignore` configuré
-
-#### Session 3 — Tests, CI & Revue Phase 1 ✅
-- [x] pytest + pytest-asyncio + httpx installés
-- [x] `pytest.ini` : `asyncio_mode = auto`
-- [x] `tests/conftest.py` : init_db() avant les tests, drop_all après
-- [x] 6 tests pytest (routes + CRUD) — tous verts ✅
-- [x] CI GitHub Actions verte à chaque push
-- [x] Tag `v0.1.0-foundation` posé
-
-### Phase 2 — Sécurité IA (en cours)
+### Phase 2 — Sécurité IA (Sessions 4–9) · TAG `v0.2.0-security` ✅
 
 #### Session 4 — Spec PII + Microsoft Presidio ✅
-- [x] Presidio + SpaCy FR installés (`fr_core_news_md`)
-- [x] 4 custom recognizers : `PHONE_NUMBER_FR`, `PHONE_NUMBER_TN`, `IBAN_CODE_TN`, `CIN_TN`
-- [x] Filtre faux positifs (LOCATION sur codes IBAN courts)
-- [x] Déduplication des détections chevauchantes (score max par zone)
-- [x] `docs/pii_spec.md` rédigé (14 entités, formats FR + TN, scores)
-- [x] Tests sur phrases réelles FR + TN — scores 1.00 sur tous les custom recognizers
+- [x] Presidio + SpaCy FR + 4 custom recognizers (FR + TN)
+- [x] 14 entités PII détectées, scores 1.00 sur formats tunisiens
+- [x] `docs/pii_spec.md` rédigé
 
 #### Session 5 — Vault (Tokenisation réversible) ✅
-- [x] `AnonymizeResult` dataclass (anonymized_text + mapping + entity_count)
-- [x] `anonymize(text) → AnonymizeResult` — remplace PII par tokens numérotés
-- [x] `deanonymize(text, mapping) → str` — réinjecte les vraies valeurs
-- [x] `save_mapping(mapping, session_id)` — sauvegarde en DB avec TTL 24h
-- [x] `get_mapping(session_id)` — récupère le mapping depuis le Vault
-- [x] Fix UNIQUE constraint : contrainte composite (token, session_id)
-- [x] Fix timezone : `datetime.now(timezone.utc).replace(tzinfo=None)` partout
-- [x] Pipeline branché dans `POST /chat` : anonymize → LLM → deanonymize → log_event
-- [x] `tokens_used` réels lus depuis `response.usage.total_tokens` (LiteLLM)
+- [x] `anonymize()` / `deanonymize()` + `save_mapping()` / `get_mapping()`
+- [x] Fix UNIQUE constraint (token, session_id) + Fix timezone UTC
+- [x] Pipeline branché dans `POST /chat`
 
 #### Session 6 — LLM Guard (Filtrage I/O) ✅
-- [x] Python 3.11 installé + venv recréé (Python 3.14 incompatible avec sentencepiece)
-- [x] `pip install llm-guard` — modèles téléchargés en cache HuggingFace
-- [x] `services/security_scanner.py` : scanner hybride 3 couches
-  - Couche 1 : Regex patterns (12 patterns injection FR + EN)
-  - Couche 2 : Filtre contexte PII (évite faux positifs sur données personnelles)
-  - Couche 3 : LLM Guard `PromptInjection` (threshold=0.99)
-- [x] `OutputScanner` : LLM Guard `Toxicity`
-- [x] Résultats : 6/6 messages normaux OK · 5/5 attaques bloquées
-- [x] Intégration dans `POST /chat` (HTTP 400 si attaque, log `blocked=True`)
+- [x] InputScanner hybride 3 couches + OutputScanner regex FR + LLM Guard
+- [x] Score 30/30 (100%) — `docs/security_report.md`
 
 #### Session 7 — Pipeline complet ✅
-- [x] Ordre final validé : `anonymize → scan_input → LLM → scan_output → deanonymize → log`
-- [x] 4 cas critiques testés et validés :
-  - CAS 1 : Message normal → OK, pii: 0
-  - CAS 2 : Message avec PII → OK, pii: 3, désanonymisé correctement
-  - CAS 3 : Prompt injection → BLOQUÉ, reason: prompt_injection_pattern
-  - CAS 4 : PII + Attaque combinées → BLOQUÉ, pii: 2 (attaque détectée avant que les PII atteignent le LLM)
+- [x] Ordre final validé : `anonymize → scan_input(original) → LLM → scan_output → deanonymize → log`
+- [x] 4 cas critiques validés : normal / PII / attaque / PII+attaque
+
+#### Session 8 — Routes /audit (JWT) + Tests anti-fuite PII ✅
+- [x] Table `users` + `services/auth.py` + `crud/user_crud.py`
+- [x] Routes `/auth/register`, `/auth/login`, `/auth/token` (Swagger caché)
+- [x] `GET /audit` + `GET /audit/stats` protégés JWT
+- [x] `tests/test_antifuite.py` : 5/5 ✅ · Total : **11/11** ✅
+
+#### Session 9 — SSE Streaming + Audit OWASP ✅
+- [x] `POST /chat/stream` avec `StreamingResponse` + stream LiteLLM
+- [x] Buffer par mot pour éviter la coupure des tokens PII en streaming
+- [x] Désanonymisation à la volée dans le générateur SSE
+- [x] Checklist OWASP API Security Top 10 : 7/10 couverts, 3 améliorations futures documentées
+- [x] `docs/security_report.md` mis à jour avec la section OWASP
+- [x] Tag `v0.2.0-security` posé
 
 ---
 
 ## 🔜 Prochaines étapes
 
-### Phase 2 — Sécurité IA (suite)
+### Phase 3 — Frontend React (Sessions 10–14) ← en cours
 
-#### Session 8 — Routes /audit (JWT) + Tests anti-fuite PII ← prochaine
-- [ ] `pip install python-jose[cryptography] passlib`
-- [ ] `auth.py` : `create_access_token()`, `verify_token()`, `get_current_user()`
-- [ ] Table `users` dans `database.py`
-- [ ] `POST /auth/login` → retourne JWT
-- [ ] `GET /audit` paginé (`from`, `to`, `type`, `page`, `limit`) protégé JWT
-- [ ] `GET /audit/stats` (totaux, PII/7j, latence moyenne) protégé JWT
-- [ ] Tests anti-fuite pytest : PII absentes du message envoyé au LLM
-- [ ] `docs/security_report.md`
+#### Session 10 — Setup Vite/React/TS + Chat UI ← prochaine
+- [ ] `npm create vite@latest frontend -- --template react-ts`
+- [ ] Tailwind CSS + Zustand + Axios + Recharts + React Router
+- [ ] Structure `src/{components,pages,stores,api,types}`
+- [ ] `ChatMessage.tsx` + `ChatWindow.tsx` + `api/chat.ts`
+- [ ] Surligner les tokens PII détectés (badge de risque)
+- [ ] Ajouter le service frontend au `docker-compose.yml`
 
-#### Session 9 — SSE Streaming + Audit OWASP
-- [ ] `POST /chat/stream` avec `StreamingResponse`
-- [ ] Désanonymisation à la volée pendant le streaming
-- [ ] Checklist OWASP API Security Top 10
-- [ ] Tag `v0.2.0-security`
+#### Session 11 — Streaming Chat (token par token)
+- [ ] `sendMessageStream()` avec fetch + ReadableStream
+- [ ] Effet typing dans `ChatWindow.tsx`
 
-### Phase 3 — Frontend React (Sessions 10–14)
-- [ ] S10 : Setup Vite/React/TS + Chat UI
-- [ ] S11 : Streaming token par token
-- [ ] S12 : Dashboard Recharts
-- [ ] S13 : Auth JWT + filtres/export CSV
-- [ ] S14 : Tests E2E Playwright + charge Locust · Tag `v0.3.0-frontend`
+#### Session 12 — Dashboard Recharts
+- [ ] BarChart (PII/jour) + LineChart (latence) + PieChart (répartition)
+- [ ] 4 cartes stats depuis `GET /audit/stats`
+
+#### Session 13 — Auth JWT + Filtres/Export CSV
+- [ ] `LoginPage.tsx` + `authStore.ts` (Zustand, JWT en mémoire)
+- [ ] `PrivateRoute` + intercepteur Axios
+- [ ] Filtres + export CSV côté frontend
+
+#### Session 14 — Tests E2E Playwright + Charge Locust · Tag `v0.3.0-frontend`
 
 ### Phase 4 — Finalisation (Sessions 15–17)
 - [ ] S15 : Docs techniques + Docker prod
@@ -317,7 +301,7 @@ Détail complet : `docs/pii_spec.md`
 # Activer le venv (depuis backend/)
 venv\Scripts\Activate.ps1
 
-# Lancer en local (sans Docker)
+# Lancer en local
 uvicorn main:app --reload
 
 # Lancer avec Docker (depuis la racine)
@@ -337,6 +321,7 @@ pip freeze > requirements.txt
 ```
 GROQ_API_KEY=ta_cle_groq_ici
 GROQ_MODEL=groq/openai/gpt-oss-20b
+SECRET_KEY=change-me-in-production
 ```
 
 ---
@@ -345,19 +330,23 @@ GROQ_MODEL=groq/openai/gpt-oss-20b
 
 | Décision | Choix | Raison |
 |---|---|---|
-| LLM provider | Groq (gratuit) | Pas de clé OpenAI, free tier Groq suffisant |
-| Abstraction LLM | LiteLLM | Change de modèle sans toucher au code, juste `.env` |
+| LLM provider | Groq (gratuit) | Pas de clé OpenAI, free tier suffisant |
+| Abstraction LLM | LiteLLM | Change de modèle sans toucher au code |
 | DB | SQLite (aiosqlite) | Simple, sans serveur, suffisant pour un projet solo |
-| ORM | SQLAlchemy async | Compatible FastAPI async, séparation CRUD par modèle |
-| CRUD | Séparés par modèle | Maintenabilité, cohérent avec la logique services/ |
+| ORM | SQLAlchemy async | Compatible FastAPI async |
+| CRUD | Séparés par modèle | Maintenabilité |
 | Tests | conftest.py + init_db | Évite "no such table" en CI |
-| Docker dev | Volume code + --reload | Hot-reload sans rebuild à chaque modif |
-| Python | 3.11 (pas 3.14) | sentencepiece (dep llm-guard) incompatible Python 3.14 |
-| Modèle Groq | openai/gpt-oss-20b | llama3-70b-8192 et llama-3.3-70b-versatile dépréciés |
+| Docker dev | Volume code + --reload | Hot-reload sans rebuild |
+| Python | 3.11 (pas 3.14) | sentencepiece incompatible Python 3.14 |
+| bcrypt | 4.0.1 (pas latest) | Versions récentes incompatibles avec passlib |
 | Scanner Input | Hybride 3 couches | LLM Guard seul = trop de faux positifs sur données FR/TN |
-| Ordre pipeline | anonymize → scan | PII retirées avant que LLM Guard les voie → 0 faux positif |
-| UNIQUE Vault | (token, session_id) | Token unique par session, pas global — permet multi-sessions |
-| Timezone | datetime.now(timezone.utc) | datetime.utcnow() causait des bugs de comparaison dans SQLite |
+| Scan message | Original (pas anonymisé) | SpaCy peut masquer une injection en `[PERSON_1]` |
+| OutputScanner | Regex FR + LLM Guard | LLM Guard Toxicity ne couvre pas le français |
+| UNIQUE Vault | (token, session_id) | Token unique par session, pas global |
+| Timezone | datetime.now(timezone.utc) | datetime.utcnow() causait des bugs SQLite |
 | Recognizers PII | Custom PatternRecognizer | Presidio natif ne couvre pas les formats tunisiens |
+| JWT stockage | En mémoire (Zustand) | Évite XSS via localStorage |
+| /auth/token | include_in_schema=False | Caché dans Swagger mais utilisé par le bouton Authorize |
+| Streaming buffer | Buffer par mot | Évite la coupure des tokens PII entre chunks SSE |
 | session_id | Généré par le frontend (S10) | Scope les tokens du Vault par conversation |
-| user_id | Issu du JWT (Session 8) | Lié à l'authentification, pas encore implémenté |
+| user_id | Issu du JWT (S8) | Lié à l'authentification |

@@ -38,8 +38,9 @@ async def chat(request: ChatRequest):
     # Étape 1 — Anonymiser D'ABORD
     anonymize_result = detector.anonymize(request.message)
 
-    # Étape 2 — Scanner le texte ANONYMISÉ (plus de PII qui perturbent le scanner)
-    input_scan = input_scanner.scan(anonymize_result.anonymized_text)
+    # Étape 2 — Scanner le message ORIGINAL
+    # (Presidio peut transformer un texte d'attaque en [PERSON_1] et le cacher)
+    input_scan = input_scanner.scan(request.message)
     if not input_scan.is_safe:
         await log_event(
             session_id=request.session_id,
@@ -54,10 +55,11 @@ async def chat(request: ChatRequest):
             detail=f"Message bloqué : {input_scan.blocked_reason}"
         )
 
-    # Étape 3 — Sauvegarder le mapping dans le Vault
+    # Étape 3 — Sauvegarder le mapping
     if anonymize_result.mapping:
         await save_mapping(anonymize_result.mapping, request.session_id)
-    # Étape 4 — Envoyer le texte anonymisé au LLM
+
+    # Étape 4 — LLM (texte anonymisé)
     llm_response, tokens_used = send_to_llm(anonymize_result.anonymized_text)
 
     # Étape 5 — Scan output
@@ -76,11 +78,11 @@ async def chat(request: ChatRequest):
             detail="Réponse bloquée : contenu toxique détecté"
         )
 
-    # Étape 6 — Désanonymiser la réponse
+    # Étape 6 — Désanonymiser
     mapping = await get_mapping(request.session_id)
     final_response = detector.deanonymize(llm_response, mapping)
 
-    # Étape 7 — Logger dans l'audit
+    # Étape 7 — Logger
     latency_ms = int((time.perf_counter() - start) * 1000)
     await log_event(
         session_id=request.session_id,

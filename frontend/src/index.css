@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+
+@theme {
+  /* Polices */
+  --font-heading: "DM Sans", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+
+  /* Couleurs — Light mode */
+  --color-bg-light: #F4F7FE;
+  --color-surface-light: #FFFFFF;
+  --color-text-primary: #2B3674;
+  --color-text-secondary: #A3AED0;
+
+  /* Couleurs — Dark mode */
+  --color-bg-dark: #0B1437;
+  --color-surface-dark: #111C44;
+
+  /* Accents */
+  --color-brand: #4318FF;
+  --color-brand-light: #868CFF;
+  --color-ats: #00AEEF;
+
+  /* Status sécurité */
+  --color-success: #05CD99;
+  --color-danger: #EE5D50;
+  --color-warning: #FFB547;
+  --color-muted: #A3AED0;
+
+  /* Shadows */
+  --shadow-card: 0px 18px 40px rgba(112, 144, 176, 0.12);
+  --shadow-card-dark: 0px 18px 40px rgba(0, 0, 0, 0.30);
+
+  /* Border radius */
+  --radius-card: 20px;
+  --radius-btn: 12px;
+  --radius-input: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-light);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.dark body {
+  background-color: var(--color-bg-dark);
+  color: #FFFFFF;
+}
+@variant dark (&:where(.dark, .dark *));

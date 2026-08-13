@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "chat": "Chat",
+    "dashboard": "Dashboard",
+    "logout": "Déconnexion",
+    "language": "Langue",
+    "user": "Utilisateur",
+    "admin": "Administrateur"
+  },
+  "login": {
+    "title": "Bienvenue",
+    "subtitle": "Connectez-vous à Gateway IA",
+    "email": "Adresse email",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "error": "Email ou mot de passe incorrect",
+    "server_error": "Erreur serveur — réessayez plus tard",
+    "network_error": "Serveur inaccessible — vérifiez que le backend tourne"
+  },
+  "chat": {
+    "title": "Chat sécurisé",
+    "greeting": "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
+    "placeholder": "Tapez votre message...",
+    "send": "Envoyer",
+    "pii_detected": "{{count}} donnée(s) protégée(s)",
+    "blocked": "Message bloqué par le système de sécurité",
+    "thinking": "Réflexion en cours...",
+    "you": "Vous",
+    "assistant": "Assistant IA",
+    "welcome": "Vos données personnelles sont automatiquement protégées avant d'être envoyées au LLM."
+  },
+  "dashboard": {
+    "title": "Dashboard d'Audit",
+    "subtitle": "Suivi des événements de sécurité",
+    "total_messages": "Messages totaux",
+    "pii_detected": "PII détectées",
+    "blocked": "Attaques bloquées",
+    "avg_latency": "Latence moyenne",
+    "chart_pii": "PII détectées par jour",
+    "chart_types": "Répartition des événements",
+    "table_title": "Derniers événements",
+    "table_session": "Session",
+    "table_type": "Type",
+    "table_severity": "Sévérité",
+    "table_pii": "PII",
+    "table_latency": "Latence",
+    "table_blocked": "Bloqué",
+    "table_date": "Date",
+    "no_data": "Aucun événement pour le moment"
+  },
+  "events": {
+    "NORMAL": "Normal",
+    "PII_DETECTED": "PII détectée",
+    "PROMPT_INJECTION": "Injection",
+    "TOXIC_OUTPUT": "Toxique"
+  },
+  "severity": {
+    "low": "Faible",
+    "medium": "Moyen",
+    "high": "Élevé",
+    "critical": "Critique"
+  },
+  "footer": {
+    "credit": "Développé par Maher Bouchrara · Junior Software Engineer · Xpertos IT"
+  }
+}

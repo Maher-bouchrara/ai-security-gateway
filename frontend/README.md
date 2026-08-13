@@ -1,78 +1,75 @@
-# Frontend — Gateway IA
+# React + TypeScript + Vite
 
-Interface React/TypeScript : chat connecté à la Gateway (avec affichage des PII détectées), et Dashboard d'Audit (graphiques, filtres, export CSV).
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## 🧱 Stack
+Currently, two official plugins are available:
 
-- **React 18** + **Vite** — build et dev server
-- **TypeScript** (mode strict) — typage de bout en bout
-- **Tailwind CSS** — styles utilitaires
-- **Zustand** — état global (notamment l'authentification, JWT en mémoire)
-- **Axios** — appels HTTP vers l'API backend
-- **Recharts** — graphiques du Dashboard d'Audit
-- **React Router** — navigation et routes protégées
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## 📁 Structure (cible)
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 
 ```
-frontend/
-├── src/
-│   ├── components/
-│   │   ├── ChatMessage.tsx     → affichage d'un message + badge de risque
-│   │   └── ChatWindow.tsx      → liste de messages + input + streaming
-│   ├── pages/
-│   │   ├── LoginPage.tsx
-│   │   └── DashboardPage.tsx   → graphiques Recharts + tableau d'audit
-│   ├── stores/
-│   │   └── authStore.ts        → Zustand : token, login(), logout()
-│   ├── api/
-│   │   └── chat.ts             → sendMessage() / sendMessageStream()
-│   ├── types/
-│   │   └── index.ts            → ChatMessage, AuditEvent, PIIDetection
-│   └── App.tsx
-├── index.html
-├── vite.config.ts
-├── tailwind.config.js
-├── tsconfig.json
-├── package.json
-└── .env.example
+
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+
 ```
-
-## ⚙️ Installation locale
-
-```bash
-cd frontend
-npm install
-cp .env.example .env       # VITE_API_URL=http://localhost:8000
-npm run dev
-```
-
-Application disponible sur `http://localhost:5173`.
-
-## 🔑 Variables d'environnement
-
-| Variable | Description |
-|---|---|
-| `VITE_API_URL` | URL de base de l'API backend (ex. `http://localhost:8000`) |
-
-## 🏗️ Build production
-
-```bash
-npm run build       # génère le dossier dist/
-npm run preview     # prévisualise le build en local
-```
-
-## 🧪 Tests
-
-```bash
-npx playwright test          # tests E2E (login, chat, dashboard, sécurité)
-npx playwright test --ui     # mode interactif
-```
-
-## 🔐 Sécurité côté frontend
-
-- Le JWT est stocké **en mémoire** (store Zustand), jamais dans `localStorage`, pour limiter les risques XSS.
-- Les routes sensibles (`/dashboard`) sont protégées par un composant `PrivateRoute`.
-- Les tokens PII (`[PERSONNE_1]`, `[EMAIL_1]`…) sont surlignés visuellement dans le chat avec une infobulle affichant la vraie valeur, pour rendre la sécurité visible côté utilisateur.
-
-Détail de l'architecture complète : voir [`../Architecture-GatewayIA.html`](../Architecture-GatewayIA.html).

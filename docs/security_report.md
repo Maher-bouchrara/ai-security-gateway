@@ -184,3 +184,18 @@ pytest -v
 | `test_audit_crud.py` | 2 | ✅ |
 | `test_antifuite.py` | 5 | ✅ |
 | **Total** | **11** | **11/11 ✅** |
+
+## 10. Checklist OWASP API Security Top 10
+
+| # | Risque | Statut | Note |
+|---|---|---|---|
+| API1 | Broken Object Level Authorization | ✅ Couvert | JWT requis sur /audit |
+| API2 | Broken Authentication | ✅ Couvert | JWT HS256 + expiration 60min |
+| API3 | Broken Object Property Level Authorization | ✅ Couvert | AuditEventSchema filtre les champs |
+| API4 | Unrestricted Resource Consumption | ⚠️ Partiel | Pas de rate limiting sur /chat |
+| API5 | Broken Function Level Authorization | ⚠️ Partiel | /auth/register ouvert (à restreindre en prod) |
+| API6 | Unrestricted Access to Sensitive Business Flows | ✅ Couvert | Vault sans endpoint public |
+| API7 | Server Side Request Forgery | ✅ N/A | Pas de requêtes vers URLs utilisateur |
+| API8 | Security Misconfiguration | ✅ Couvert | Erreurs génériques, pas de stack trace |
+| API9 | Improper Inventory Management | ⚠️ Partiel | Swagger /docs actif (à désactiver en prod) |
+| API10 | Unsafe Consumption of APIs | ✅ Couvert | LiteLLM gère les erreurs LLM proprement |

@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "chat": "Chat",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "language": "Language",
+    "user": "User",
+    "admin": "Admin"
+  },
+  "login": {
+    "title": "Welcome",
+    "subtitle": "Sign in to Gateway IA",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Sign in",
+    "error": "Invalid email or password",
+    "server_error": "Server error — please try again later",
+    "network_error": "Server unreachable — check that the backend is running"
+  },
+  "chat": {
+    "title": "Secure Chat",
+    "greeting": "Hello! How can I assist you today?",
+    "placeholder": "Type your message...",
+    "send": "Send",
+    "pii_detected": "{{count}} protected data",
+    "blocked": "Message blocked by security system",
+    "thinking": "Thinking...",
+    "you": "You",
+    "assistant": "AI Assistant",
+    "welcome": "Your personal data is automatically protected before being sent to the LLM."
+  },
+  "dashboard": {
+    "title": "Audit Dashboard",
+    "subtitle": "Security events monitoring",
+    "total_messages": "Total messages",
+    "pii_detected": "PII detected",
+    "blocked": "Blocked attacks",
+    "avg_latency": "Avg latency",
+    "chart_pii": "PII detected per day",
+    "chart_types": "Events breakdown",
+    "table_title": "Latest events",
+    "table_session": "Session",
+    "table_type": "Type",
+    "table_severity": "Severity",
+    "table_pii": "PII",
+    "table_latency": "Latency",
+    "table_blocked": "Blocked",
+    "table_date": "Date",
+    "no_data": "No events yet"
+  },
+  "events": {
+    "NORMAL": "Normal",
+    "PII_DETECTED": "PII detected",
+    "PROMPT_INJECTION": "Injection",
+    "TOXIC_OUTPUT": "Toxic"
+  },
+  "severity": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical"
+  },
+  "footer": {
+    "credit": "Developed by Maher Bouchrara · Junior Software Engineer · Xpertos IT"
+  }
+}

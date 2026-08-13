@@ -174,7 +174,8 @@ async def chat_stream(request: ChatRequest):
                 for token, value in mapping.items():
                     deanonymized = deanonymized.replace(token, value)
                 yield f"data: {deanonymized}\n\n"
-
+            
+            yield f"data: [PII:{anonymize_result.entity_count}]\n\n"
             yield "data: [DONE]\n\n"
 
             await log_event(

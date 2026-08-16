@@ -83,7 +83,6 @@ export default function DashboardPage() {
   const [hasMore, setHasMore] = useState(true)
   const [filter, setFilter] = useState<string>('')
   const [isFirst, setIsFirst] = useState(true)
-  const [refreshKey, setRefreshKey] = useState(0)
 
   const fetchData = async () => {
     if (isFirst) {
